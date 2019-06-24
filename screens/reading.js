@@ -7,10 +7,9 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, Alert} from 'react-native';
-import Sentence from './Components/Sentence/Sentence.js';
-import book from './book/book.js';
-import {createStackNavigator} from 'react-navigation'
+import {Platform, StyleSheet, Text, View, Button, Alert, TouchableWithoutFeedback} from 'react-native';
+import Sentence from '../Components/Sentence/Sentence';
+// import book from './book/book.js';
 
 const Books = {
   Thrones: {
@@ -25,17 +24,14 @@ const Books = {
   }
 };
 
-const bookTest = ["We should start back, Gared urged as the woods began to grow dark around them.", "The wildlings are dead.", "Do the dead frighten you?", "Ser Waymar Royce asked with just the hint of a smile.", "Gared did not rise to the bait.", "He was an old man, past fifty, and he had seen the lordlings come and go.", "Dead is dead, he said.", "We have no business with the dead.", "Are they dead?", "Royce asked softly.", "What proof have we?", "Will saw them, Gared said.", "If he says they are dead, that’s proof enough for me.", "Will had known they would drag him into the quarrel sooner or later.", "He wished it had been later rather than sooner.", "My mother told me that dead men sing no songs, he put in.", "My wet nurse said the same thing, Will, Royce replied.", "Never believe anything you hear at a woman’s tit.", "There are things to be learned even from the dead.", "His voice echoed, too loud in the twilit forest.", "We have a long ride before us,” Gared pointed out.", "Eight days, maybe nine. And night is falling.", "Ser Waymar Royce glanced at the sky with disinterest.", "It does that every day about this time.", "Are you unmanned by the dark, Gared?", "Will could see the tightness around Gared’s mouth, the barely suppressed anger in his eyes under the thick black hood of his cloak.", "Gared had spent forty years in the Night’s Watch, man and boy, and he was not accustomed to being made light of.", "Yet it was more than that.", "Under the wounded pride, Will could sense something else in the older man.", "You could taste it; a nervous tension that came perilous close to fear.", "Will shared his unease.", "He had been four years on the Wall.", "The first time he had been sent beyond, all the old stories had come rushing back, and his bowels had turned to water.", "He had laughed about it afterward.", "He was a veteran of a hundred rangings by now, and the endless dark wilderness that the southron called the haunted forest had no more terrors for him.", "Until tonight.", "Something was different tonight.", "There was an edge to this darkness that made his hackles rise.", "Nine days they had been riding, north and northwest and then north again, farther and farther from the Wall, hard on the track of a band of wildling raiders.", "Each day had been worse than the day that had come before it.", "Today was the worst of all.", "A cold wind was blowing out of the north, and it made the trees rustle like living things.", "All day, Will had felt as though something were watching him, something cold and implacable that loved him not.", 'Gared had felt it too.', "Will wanted nothing so much as to ride hellbent for the safety of the Wall, but that was not a feeling to share with your commander.", "Especially not a commander like this one.", "Ser Waymar Royce was the youngest son of an ancient house with too many heirs.", "He was a handsome youth of eighteen, grey-eyed and graceful and slender as a knife.", "Mounted on his huge black destrier, the knight towered above Will and Gared on their smaller garrons.", "He wore black leather boots, black woolen pants, black moleskin gloves, and a fine supple coat of gleaming black ringmail over layers of black wool and boiled leather.", "Ser Waymar had been a Sworn Brother of the Night’s Watch for less than half a year, but no one could say he had not prepared for his vocation.", "At least insofar as his wardrobe was concerned.", "His cloak was his crowning glory; sable, thick and black and soft as sin.", "'Bet he killed them all himself, he did,' Gared told the barracks over wine, 'twisted their little heads off, our mighty warrior.'", "They had all shared the laugh.", "It is hard to take orders from a man you laughed at in your cups, Will reflected as he sat shivering atop his garron.", "Gared must have felt the same.", "'Mormont said as we should track them, and we did,' Gared said.", "They’re dead.", "They shan’t trouble us no more.", "There’s hard riding before us.", "I don’t like this weather.", "If it snows, we could be a fortnight getting back, and snow’s the best we can hope for.", "Ever seen an ice storm, my lord?", "The lordling seemed not to hear him.", "He studied the deepening twilight in that half- bored, half-distracted way he had.", "Will had ridden with the knight long enough to understand that it was best not to interrupt him when he looked like that.", "Tell me again what you saw, Will.", "All the details.", "Leave nothing out.", "Will had been a hunter before he joined the Night’s Watch.", "Well, a poacher in truth.", "The End.", "For now."];
-const bookTranslated = ["Deberíamos empezar de nuevo, insistió Gared cuando el bosque comenzó a oscurecerse alrededor de ellos", "Los salvajes están muertos", "¿Los muertos te asustan?", "Ser Waymar Royce preguntó con el toque de una sonrisa.","Gared no se acercó al cebo. ","Era un hombre mayor, tenía más de cincuenta años, y había visto a los señores ir y venir. ","Muerto está muerto, dijo. ","No tenemos ningún negocio. con los muertos. ","¿Están muertos? ","Royce preguntó en voz baja. ","¿Qué pruebas tenemos? ","Will los vio, dijo Gared.","Si él dice que están muertos, eso es prueba suficiente para yo","Will sabía que lo arrastrarían a la pelea tarde o temprano","Deseaba que hubiera sido más tarde que pronto ","Mi madre me dijo que los hombres muertos no cantan canciones, agregó.", "Mi nodriza dijo lo mismo, Will, respondió Royce.","Nunca creas nada de lo que escuchas con la teta de una mujer", "Hay cosas que aprender incluso de los muertos", "Su voz hizo eco, demasiado fuerte en el bosque crepuscular", "'Tenemos un largo camino por delante', Señaló Gared.", "Ocho días, tal vez nueve, y la noche está cayendo", "Ser Waymar Royce miró al cielo con desinterés.", "Hace eso todos los días a esta hora.", "¿No eres tripulado por la oscuridad, Gared?", "Will pudo ver la tensión alrededor de la boca de Gared, la ira apenas contenida en sus ojos bajo la gruesa capucha negra de su capa", "Gared había pasado cuarenta años en la Guardia de la Noche, hombre y niño, y no estaba acostumbrado a ser ignorado.", "Sin embargo, era más que eso.", "Bajo el orgullo herido, Will podía sentir algo más en el hombre mayor.", "Podías saborearlo; una tensión nerviosa que se acercaba peligrosamente al miedo malestar.", "Will compartió su inquietud.", "Había estado cuatro años en el Muro", "La primera vez que lo enviaron al otro lado, todas las viejas historias habían regresado de prisa y sus entrañas se habían convertido en agua", "Se había reído de eso después", "Ya era un veterano de cien toques, y el desierto oscuro y sin fin que Southron llamó el bosque encantado no tenía más terrores para él.","Hasta esta noche","Algo fue diferente esta noche", "Hubo un borde en esta oscuridad que hizo que se alzaran sus jirones.", "Nueve días habían estado montando, al norte y al noroeste y luego al norte de nuevo, más y más lejos del Muro, duros en la pista de una banda de asaltantes salvajes.", "Cada día había sido peor que el día que había llegado antes de eso","Hoy fue el peor de todos", "Un viento frío soplaba desde el norte, y hacía que los árboles crujieran como seres vivos", "Todo el día, Will sintió como si algo lo estuviera observando, algo frío y implacable que no lo amaba.", "Gared también lo había sentido", "Will no quería nada más que andar en el infierno por la seguridad del Muro, pero ese no era un sentimiento para compartir con tu comandante", "Especialmente no un comandante como éste", "Ser Waymar Royce era el hijo más joven de una casa antigua con demasiados herederos", "Era un joven apuesto de dieciocho años, de ojos grises y elegante y delgado como un cuchillo", "Montado en su enorme corcel negro, el caballero se alzaba por encima de Will y Gared en sus garrones más pequeños", "Llevaba botas de cuero negro, pantalones de lana negros, guantes negros de piel de topo y una capa fina y brillante de brillante anillo negro sobre capas de negro lana y cuero hervido.", "Ser Waymar había sido un hermano jurado de la Guardia de la Noche por menos de medio año, pero nadie podía decirlo, no se había preparado para su vocación.", "Al menos en lo que respecta a su vestuario","Su manto fue su gloria suprema; sable, espeso, negro y suave como el pecado.", "'Apuesto a que él los mató a todos él mismo, lo hizo', dijo Gared a los barracones sobre de vino, 'se retorció la cabeza, nuestro poderoso guerrero'","Todos compartieron la risa", "Es difícil recibir órdenes de un hombre del que te reíste en tus tazas, Will reflexionó mientras se sentaba temblando encima de su garrón", "Gared debe haber sentido lo mismo.", "Mormont dijo que deberíamos rastrearlos, y lo hicimos', dijo Gared.","Ellos están muertos", "No nos molestarán más", "Hay una conducción difícil ante nosotros.", "No me gusta este clima.", "Si nieva, podríamos ser una quincena para volver, y la nieve es lo mejor que podemos esperar", "¿Alguna vez has visto una tormenta de hielo, mi señor?", "El señor no pareció escucharlo", "Estudió la profunda penumbra de esa manera medio aburrida, medio distraída que había tenido", "Will había cabalgado con el caballero el tiempo suficiente para comprender que era mejor no interrumpirlo cuando se veía así.", "Dime otra vez lo que viste, Will","Todos los detalles", "No dejar nada afuera", "Will había sido un cazador antes de unirse a la Guardia de la Noche", "Bueno, un cazador furtivo en verdad", "El fin.", "Por ahora."];
-
 type Props = {};
 
-export default class App extends Component {
+export default class Reading extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      currentSentenceIndex: 55,
+      currentSentenceIndex: 0,
       currentBook: Books.Charlie
     };
   }
@@ -57,7 +53,7 @@ export default class App extends Component {
 
   nextSentence() {
     this.setState({
-      currentSentenceIndex: this.state.currentSentenceIndex + 5
+      currentSentenceIndex: this.state.currentSentenceIndex + 1
     });
     if (this.state.currentSentenceIndex > this.state.currentBook.en.length - 2) {
       this.changeBook()
@@ -78,34 +74,31 @@ export default class App extends Component {
     }
   }
 
+  book = this.props.navigation.getParam('book', 'what book is this?');
+
   render() {
     return (
       <View style={styles.container}>
-        <View style={{position:'absolute',paddingBottom: 600, zIndex:1}}>
+        {/* <View style={{position:'absolute',paddingBottom: 600}}>
           <Button
               onPress={() => (
                 this.changeBook()
                 )}
-                title={this.state.currentBook.title}
+                title={this.state.currentBook.title}                
                 />
-        </View>
+          
+        </View> */}
         <View style={{alignContent:'flex-start'}}>
-          <Sentence text={this.state.currentBook.en[this.state.currentSentenceIndex]}/>
-          <Sentence text={this.state.currentBook.esp[this.state.currentSentenceIndex]}/>
+          <Sentence text={this.book.en[this.state.currentSentenceIndex]}/>
+          <Sentence text={this.book.esp[this.state.currentSentenceIndex]}/>
         </View>
-        <View style={{display: 'flex', flexDirection: 'row', position: 'absolute', paddingTop: 650}}>
-          <Button
-            onPress={() => (
-              this.lastSentence()
-              )}
-              title='back'
-              />
-          <Button
-            onPress={() => (
-              this.nextSentence())
-            }
-            title='next'
-            />
+        <View style={{display: 'flex', flexDirection: 'row', position: 'absolute', zIndex:1}}>
+            <TouchableWithoutFeedback onPress={() => this.lastSentence()}>
+              <View style={{width: 250, height: 450, margin: 20}} />
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => this.nextSentence()}>
+              <View style={{width: 250, height: 450, margin: 20}} />
+            </TouchableWithoutFeedback>
         </View>
 
       </View>
@@ -118,7 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FEFBF7',
   },
   welcome: {
     fontSize: 20,
