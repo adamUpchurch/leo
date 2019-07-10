@@ -8,11 +8,14 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, Alert} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import {
   createBottomTabNavigator,
   createStackNavigator,
   createAppContainer,
 } from 'react-navigation';import Reading from './screens/reading';
+
 import Library from './screens/library';
 
 export default class App extends Component {
