@@ -1,43 +1,29 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, Alert} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-
-import {
-  createBottomTabNavigator,
-  createStackNavigator,
-  createAppContainer,
-} from 'react-navigation';import Reading from './screens/reading';
-
+import Reading from './screens/reading';
 import Library from './screens/library';
-
-export default class App extends Component {
-  
-  render() {
-    return (
-      <AppStackNavigator />
-    );
-  }
-};
+import AuthLoading from './screens/authLoading';
+import Login from './screens/login';
+import Signup from './screens/signup';
 
 
-const AppStackNavigator = createStackNavigator({
+const AuthStack = createStackNavigator({
+  Login: {screen: Login},
+  Signup: {screen: Signup}
+})
+
+const AppStack = createStackNavigator({
   Library: {screen: Library},
   Reading: {screen: Reading}
 })
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+export default createSwitchNavigator(
+  {
+    AuthLoading: AuthLoading,
+    App: AppStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
   }
-});
+)
