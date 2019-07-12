@@ -1,0 +1,5 @@
+platform :ios, '11.0'
+
+target 'Leo_ios' do
+ pod 'AppAuth', '>= 0.95.0'
+end
