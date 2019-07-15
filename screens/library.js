@@ -7,8 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback} from 'react-native';
-import Sentence from '../Components/Sentence/Sentence';
+import {ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Library extends Component {
