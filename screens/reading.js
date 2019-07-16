@@ -7,9 +7,10 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, Alert, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import Sentence from '../Components/Sentence/Sentence';
-import AsyncStorage from '@react-native-community/async-storage';
+
+import {localStorage} from '../helper/leo'
 
 
 export default class Reading extends Component {
@@ -18,14 +19,13 @@ export default class Reading extends Component {
     super(props);
     this.state = {
       currentSentenceIndex: 0,
+      book: this.props.navigation.getParam('book', 'what book is this?')
     };
     this.storeData = this.storeData.bind(this);
   }
 
-  book = this.props.navigation.getParam('book', 'what book is this?');
-
   componentDidMount(){
-    this.storeData()
+    localStorage.storeData('last_read', this.state.book.title)
   }
 
   nextSentence() {
@@ -48,14 +48,6 @@ export default class Reading extends Component {
       this.setState({
         currentSentenceIndex: 0
       });
-    }
-  }
-
-  storeData = async () => {
-    try {
-      await AsyncStorage.setItem('last_read', this.book.title)
-    } catch (e) {
-      // saving error
     }
   }
 

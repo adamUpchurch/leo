@@ -18,7 +18,11 @@ import HomeScreen from './screens/HomeScreen';
 const AppStack = createStackNavigator({
   Library: {screen: Library},
   Reading: {screen: Reading}
-})
+  },
+  {
+    initialRouteName: 'Library',
+  }
+)
 
 const Navigation = createStackNavigator({
   Home: { screen: HomeScreen },

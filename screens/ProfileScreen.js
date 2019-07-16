@@ -47,8 +47,8 @@ export default class ProfileScreen extends React.Component {
   };
 
   _getToken = async () => {
-  const accessToken = await AsyncStorage.getItem('accessToken');
-  return accessToken
+    const accessToken = await AsyncStorage.getItem('accessToken');
+    return accessToken
   };
 
   render() {
@@ -72,6 +72,11 @@ export default class ProfileScreen extends React.Component {
           title="CALL API"
         />
         <Text>{JSON.stringify(this.profile, null, 2)}</Text>
+
+        <Button
+          onPress={() => this.props.navigation.navigate('App')}
+          title="Go to Library"
+        />
       </View>
     );
   }

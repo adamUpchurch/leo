@@ -7,13 +7,17 @@ import {
 
 import LoginModal from '../modals/LoginModal'
 import AsyncStorage from '@react-native-community/async-storage';
+import async from 'async';
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
       super(props);
+      
       this.state = { modalVisible: true };
+
       this.onAuth = this.onAuth.bind(this)
-      this._storeData = this._storeData.bind(this)
+      this._retrieveData = this._retrieveData.bind(this)
+      
     }
   
     static navigationOptions = {
@@ -21,21 +25,21 @@ export default class HomeScreen extends React.Component {
       headerLeft: false
     };
 
-    _storeData = async (token) => {
+    _retrieveData = async () => {
       try {
-        await AsyncStorage.setItem('accessToken', token);
-      } catch (error) {
-        // Error saving data
+
+        return await AsyncStorage.getItem('access_token', book.title)
+
+      } catch (e) {
+        // saving error
       }
-    };
-
-
+    }
+    
     onAuth = (credentials, profile) => {
-      this.setState({modalVisible: false, token: credentials.accessToken}, () => {
-          // this._storeData()
-          this.props.navigation.navigate('Profile', {credentials: credentials, profile: profile}) 
-        }
-      )
+      async.series([
+        this.setState({modalVisible: false, token: credentials.accessToken}),
+        this.props.navigation.navigate('Profile', {credentials: credentials, profile: profile}) 
+      ])
     };
 
     render() {
