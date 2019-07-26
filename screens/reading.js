@@ -21,7 +21,7 @@ export default class Reading extends Component {
       currentSentenceIndex: 0,
       book: this.props.navigation.getParam('book', 'what book is this?')
     };
-    this.storeData = this.storeData.bind(this);
+    // this.storeData = this.storeData.bind(this);
   }
 
   componentDidMount(){
@@ -32,7 +32,7 @@ export default class Reading extends Component {
     this.setState({
       currentSentenceIndex: this.state.currentSentenceIndex + 1
     });
-    if (this.state.currentSentenceIndex > this.book.en.length - 2) {
+    if (this.state.currentSentenceIndex > this.state.book.text.en.length - 2) {
       this.changeBook()
       this.setState({
         currentSentenceIndex: 0
@@ -56,8 +56,8 @@ export default class Reading extends Component {
     return (
       <View style={styles.container}>
         <View style={{alignContent:'flex-start'}}>
-          <Sentence text={this.book.en[this.state.currentSentenceIndex]}/>
-          <Sentence text={this.book.esp[this.state.currentSentenceIndex]}/>
+          <Sentence text={this.state.book.text.en[this.state.currentSentenceIndex]}/>
+          <Sentence text={this.state.book.text.esp[this.state.currentSentenceIndex]}/>
         </View>
         <View style={{display: 'flex', flexDirection: 'row', position: 'absolute', zIndex:1}}>
             <TouchableWithoutFeedback onPress={() => this.lastSentence()}>
