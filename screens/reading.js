@@ -11,26 +11,36 @@ import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import Sentence from '../Components/Sentence/Sentence';
 
 import {localStorage} from '../helper/leo'
+import {connect} from 'react-redux'
+import {indexRecent} from '../helper/actions/index'
 
 
-export default class Reading extends Component {
+class Reading extends Component {
 
   constructor(props) {
     super(props);
+    console.log(this.props)
+    const bookReading = this.props.navigation.getParam('book', 'what book is this?')
     this.state = {
-      currentSentenceIndex: 0,
-      book: this.props.navigation.getParam('book', 'what book is this?')
+      currentSentenceIndex: bookReading.index_last_read,
+      book: bookReading
     };
     // this.storeData = this.storeData.bind(this);
   }
 
-  componentDidMount(){
-    localStorage.storeData('last_read', this.state.book.title)
-  }
+  // componentDidMount(){
+  //   localStorage.storeData('last_read', this.state.book.title)
+  // }
+
 
   nextSentence() {
+    
+    const currentSentenceIndex = this.state.currentSentenceIndex + 1
+
+    this.props.indexRecent(this.state.book._id, currentSentenceIndex, this.state.book.title)
+
     this.setState({
-      currentSentenceIndex: this.state.currentSentenceIndex + 1
+      currentSentenceIndex
     });
     if (this.state.currentSentenceIndex > this.state.book.text.en.length - 2) {
       this.changeBook()
@@ -86,3 +96,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
 });
+
+// const mapStateToProps = state => state.library[0].find( (book) => book._id === action.bookID)
+
+export default connect(null, {indexRecent})(Reading);

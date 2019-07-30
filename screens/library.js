@@ -7,11 +7,12 @@
  */
 
 import React, {Component} from 'react';
-import {ScrollView, Button, StyleSheet, Text, View, Image, TouchableWithoutFeedback} from 'react-native';
+import {ScrollView, FlatList, Button, StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from 'react-native';
 import async from 'async';
 import {Books, localStorage} from '../helper/leo'
+import {connect} from 'react-redux'
 
-export default class Library extends Component {
+class Library extends Component {
 
   constructor(props) {
     super(props);
@@ -23,50 +24,59 @@ export default class Library extends Component {
     title: 'Library',
   };
 
-  componentWillMount(){
-    localStorage.getData('last_read').then((last_read) => this.setState({last_read}))
-  }
+  // componentWillMount(){
+  //   localStorage.getData('last_read').then((last_read) => this.setState({last_read}))
+  // }
 
   render() {
     const {navigate} = this.props.navigation;
-    
-    function BookTile(props) {
-      
-      var book = props.book
+    console.log(this.props)
+    var library = this.props.library ? this.props.library : Books
+    // var library = this.props.Library
+    console.log(library)
 
-      
+    function BookTile(props) {  
+      var book = props.book.item
+      console.log('This is the book tile!')
+      console.log(book)
       return (
           <TouchableWithoutFeedback onPress={() => {
-              navigate('Reading', {book: book})
-            }}>
-            <View style={styles.bookContainer}>
-              <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
-              <View style={styles.bookTile}>
-                <Text style={styles.bookTileText}>{book.title}</Text>
-                <Text style={styles.bookTileSummary}>{book.author}</Text>
-                <Text style={styles.bookTileSummary}>{book.summary}</Text>
+            navigate('Reading', {book: book})
+          }}>
+              <View style={styles.bookContainer}>
+                <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
+                <View style={styles.bookTile}>
+                  <Text style={styles.bookTileText}>{book.title}</Text>
+                  <Text style={styles.bookTileSummary}>{book.author}</Text>
+                  <Text style={styles.bookTileSummary}>{book.summary}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
       )
     }
 
     function BookList(props) {
-      const listBooks = props.books.map((book) =>
+      const bookList = props.bookList
+      console.log(bookList)
+      const listBooks = bookList.map((book) =>
         // Correct! Key should be specified inside the array.
-        <BookTile book={book} />
+        <BookTile book={book}/>
       )
       return (
-          <ScrollView style={styles.container}>
-              {listBooks}
-          </ScrollView>
+          // <ScrollView style={styles.container}>
+          //     {listBooks}
+          // </ScrollView>
+
+          <FlatList style={styles.container} data ={bookList} renderItem = {
+            book => <BookTile book={book}/>
+          }/>
       );
     }
 
 
     return (
       <React.Fragment>
-        <Button
+        {/* <Button
           onPress={() => (
             async.series([
               localStorage.logout,
@@ -74,9 +84,9 @@ export default class Library extends Component {
             ])
             )}
           title="Logout"
-        />
-        <Text>{this.state.last_read}</Text>
-        <BookList books={Books}/>
+        /> */}
+        {/* <Text>{this.state.last_read}</Text> */}
+        <BookList bookList={library}/>
       </React.Fragment>
       
     );
@@ -120,3 +130,10 @@ const styles = StyleSheet.create({
     
   },
 });
+
+const mapStateToProps = state => {
+  console.log(state)
+  return { library: state.library[0] }
+}
+
+export default connect(mapStateToProps)(Library);
