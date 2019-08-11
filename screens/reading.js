@@ -10,7 +10,6 @@ import React, {Component} from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import Sentence from '../Components/Sentence/Sentence';
 
-import {localStorage} from '../helper/leo'
 import {connect} from 'react-redux'
 import {indexRecent} from '../helper/actions/index'
 
@@ -19,18 +18,12 @@ class Reading extends Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props)
     const bookReading = this.props.navigation.getParam('book', 'what book is this?')
     this.state = {
       currentSentenceIndex: bookReading.index_last_read,
       book: bookReading
     };
-    // this.storeData = this.storeData.bind(this);
   }
-
-  // componentDidMount(){
-  //   localStorage.storeData('last_read', this.state.book.title)
-  // }
 
 
   nextSentence() {
@@ -43,7 +36,6 @@ class Reading extends Component {
       currentSentenceIndex
     });
     if (this.state.currentSentenceIndex > this.state.book.text.en.length - 2) {
-      this.changeBook()
       this.setState({
         currentSentenceIndex: 0
       });
@@ -52,13 +44,8 @@ class Reading extends Component {
 
   lastSentence() {
     this.setState({
-      currentSentenceIndex: this.state.currentSentenceIndex - 1
+      currentSentenceIndex: this.state.currentSentenceIndex > 0 ? this.state.currentSentenceIndex - 1 : 0
     });
-    if (this.state.currentSentenceIndex < 1) {
-      this.setState({
-        currentSentenceIndex: 0
-      });
-    }
   }
 
   render() {
