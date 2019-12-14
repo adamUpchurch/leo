@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Fragment} from 'react-native';
 import {Books} from '../helper/leo'
 import {connect} from 'react-redux'
 
@@ -35,8 +35,7 @@ class Library extends Component {
                 <View style={styles.bookTile}>
                   <Text style={styles.bookTileText}>{book.title}</Text>
                   <Text style={styles.bookTileSummary}>{book.author}</Text>
-                  {/* <Text style={styles.bookTileSummary}>{book.summary}</Text> */}
-                  <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>
+                  { book.author === 'Adam Upchurch' ? <Text style={styles.bookTileSummary}>{book.summary}</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -73,6 +72,15 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: '#FEFBF7',
     padding: 10,
+  },
+  bookContainerTutorial: {
+    flex: 1,
+    flexDirection: 'row',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    backgroundColor: '#F7FAFE',
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
   },
   bookContainer: {
     flex: 1,

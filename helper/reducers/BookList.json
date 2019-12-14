@@ -1,5 +1,76 @@
 [
   {
+    "title": "test",
+    "summary": "test test!",
+    "author": "Adam Upchurch",
+    "cover": "https://cdn.cp.adobe.io/content/2/dcx/746ac66e-cd68-451b-968b-ccca91f46102/rendition/preview.jpg/version/0/format/jpg/dimension/width/size/1200",
+    "grade_level": 0,
+    "word_count": 0,
+    "unique_words": 0,
+    "index_last_read": 0,
+    "_id": "5dcf52b54801a5dba648cd16111",
+    "text": {
+      "en": [
+        "Tap on the right side of the screen.",
+        "Tap again."
+      ],
+      "esp": [
+          {
+            "text": "Toque en el lado derecho de la pantalla.",
+            "translated": [["Toque","Tap"], ["en","on"], ["el","the"], ["derecho","right"], ["de","of"],["de","the"], ["pantalla","screen"]]
+          },
+          {
+            "text": "Toque de nuevo.",
+            "translated": [["Toque","Tap"], ["de","of"], ["Nuevo","New"]]
+          }
+      ]
+    }
+  },
+  {
+    "title": "How to Read Leo",
+    "summary": "Read this first!",
+    "author": "Adam Upchurch",
+    "cover": "https://cdn.cp.adobe.io/content/2/dcx/746ac66e-cd68-451b-968b-ccca91f46102/rendition/preview.jpg/version/0/format/jpg/dimension/width/size/1200",
+    "grade_level": 0,
+    "word_count": 0,
+    "unique_words": 0,
+    "index_last_read": 0,
+    "_id": "5dcf52b54801a5dba648cd16",
+    "text": {
+      "en": [
+        "Tap on the right side of the screen.",
+        "Tap again.",
+        "Tapping moves you between sentences.",
+        "Tap the right for next.",
+        "Tap the left for back.",
+        "Tap back and forth.",
+        "That's all there is to it.",
+        "Anyway, welcome to Read Leo!",
+        "You can go back and read another book",
+        "I hope you enjoy Read Leo.",
+        "Please, share with your friends and find me on the Twitter.",
+        "Keep learning and good bye.",
+        "For now!"
+      ],
+      "esp": [
+        "Toque en el lado derecho de la pantalla.",
+        "Toque de nuevo.",
+        "Al tocar te mueve entre oraciones.",
+        "Toque a la derecha para el siguiente.",
+        "Toque la izquierda para volver.",
+        "Toque de ida y vuelta.",
+        "Eso es todo al respecto.",
+        "De todos modos, bienvenido a leer Leo!",
+        "Puedes regresar y leer otros libro",
+        "Espero que disfrutes Leer Leo.",
+        "Por favor, comparte con tus amigos y encu\u00e9ntrame en Twitter.",
+        "Sigue aprendiendo y adi\u00f3s.",
+        "\u00a1Por ahora!"
+      ]
+    }
+  }
+  ,
+  {
     "title": "The Story of the Three Little Pigs",
     "summary": "A big bad wolf huffs and puffs.",
     "author": "Unknown",

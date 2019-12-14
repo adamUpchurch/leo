@@ -2,8 +2,17 @@ import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 
 import Reading from './screens/reading';
 import Library from './screens/library';
+import Tutorial from './screens/tutorial';
 
-const AppStack = createStackNavigator({
+const libraryStack = createStackNavigator({
+  Library: {screen: Library},
+  Reading: {screen: Reading}
+  },
+  {
+    initialRouteName: 'Library',
+  }
+)
+const learningStack =  createStackNavigator({
   Library: {screen: Library},
   Reading: {screen: Reading}
   },
@@ -14,9 +23,10 @@ const AppStack = createStackNavigator({
 
 export default createSwitchNavigator(
   {
-    App: AppStack,
+    library: libraryStack,
+    learning: learningStack
   },
   {
-    initialRouteName: 'App',
+    initialRouteName: 'library',
   }
 )
