@@ -12,7 +12,7 @@ import Sentence from '../Components/Sentence/Sentence';
 import Modal, { ModalContent } from 'react-native-modals';
 
 import {connect} from 'react-redux'
-import {indexRecent} from '../helper/actions/index'
+import {indexRecent, updateVocabulary} from '../helper/actions/index'
 
 
 class Reading extends Component {
@@ -27,12 +27,11 @@ class Reading extends Component {
     };
   }
 
-
+  
   nextSentence() {
-    
     const currentSentenceIndex = this.state.currentSentenceIndex + 1
-
     this.props.indexRecent(this.state.book._id, currentSentenceIndex, this.state.book.title)
+    this.props.updateVocabulary(this.state.book.text.esp[currentSentenceIndex].translated)
 
     this.setState({
       currentSentenceIndex
@@ -55,13 +54,14 @@ class Reading extends Component {
 
   render() {
     this.storeData
+    currentText = this.state.book.text
     return (
       <View style={styles.container}>
         <View style={{alignContent:'flex-start', paddingBottom: 20}}>
-          <Sentence text={this.state.book.text.en[this.state.currentSentenceIndex]}/>
+          <Sentence text={currentText.en[this.state.currentSentenceIndex]}/>
           <TouchableHighlight onLongPress={() => { this.setState({ visible: true });}}>
             <View style={styles.button}>
-              <Sentence text={this.state.book.text.esp[this.state.currentSentenceIndex].text}/>
+              <Sentence text={currentText.esp[this.state.currentSentenceIndex].text}/>
             </View>
           </TouchableHighlight>
         </View>
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
 
 // const mapStateToProps = state => state.library[0].find( (book) => book._id === action.bookID)
 
-export default connect(null, {indexRecent})(Reading);
+export default connect(null, {indexRecent, updateVocabulary})(Reading);
