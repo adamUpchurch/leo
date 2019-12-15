@@ -29,10 +29,10 @@ class Reading extends Component {
 
   
   nextSentence() {
+    console.log(this.state.book.text["esp"][this.state.currentSentenceIndex]["translated"])
+    this.props.updateVocabulary(this.state.book.text["esp"][this.state.currentSentenceIndex]["translated"])
     const currentSentenceIndex = this.state.currentSentenceIndex + 1
     this.props.indexRecent(this.state.book._id, currentSentenceIndex, this.state.book.title)
-    this.props.updateVocabulary(this.state.book.text.esp[currentSentenceIndex].translated)
-
     this.setState({
       currentSentenceIndex
     });

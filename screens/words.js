@@ -42,7 +42,9 @@ class Words extends Component {
     }
 
     function WordList(props) {
+      console.log(props)
       const wordList = props.wordList
+      console.log(wordList)
       const listWords = wordList.map((word) =>
         // Correct! Key should be specified inside the array.
         <WordTile word={word}/>
@@ -107,29 +109,24 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  var words = [
-    {
-      text: "hola",
-      translated: "hello",
-      exposures: 12
-    },
-    {
-      text: "bienvinidos",
-      translated: "welcome",
-      exposures: 22
-    },
-    {
-      text: "felic",
-      translated: "happy",
-      exposures: 3
-    },
-    {
-      text: "adios",
-      translated: "bye",
-      exposures: 4
-    }
-  ]  
-  return { words }
+  console.log(state)
+  console.log("=====================")
+  console.log("should render words and their exposures")
+
+  if(state['library'].length == 1) {
+    var words = [
+      {
+        text: "hola",
+        translated: "hello",
+        exposures: 1
+      }
+    ]  
+    return { words }
+  }
+  else {
+    words = Object.values(state['library'][1])
+    return { words }
+  }
 }
 
 export default connect(mapStateToProps)(Words);
