@@ -1,13 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Fragment} from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux'
 
 class Words extends Component {
@@ -21,18 +13,15 @@ class Words extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-    // var words = this.props.words ? this.props.words : Words
     var words = this.props.words
 
     function WordTile(props) {  
       var word = props.word.item
       return (
           <TouchableWithoutFeedback onPress={() => {
-            // navigate('Reading', {word: word})
             // navigate to initiate flashcard game????
           }}>
               <View style={styles.wordContainer}>
-                {/* <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: word.cover}}/> */}
                 <View style={styles.WordTile}>
                   <Text style={styles.WordTileText}>{`${word.text} - ${word.translated} - ${word.exposures}`}</Text>
                 </View>
@@ -42,13 +31,7 @@ class Words extends Component {
     }
 
     function WordList(props) {
-      console.log(props)
       const wordList = props.wordList
-      console.log(wordList)
-      const listWords = wordList.map((word) =>
-        // Correct! Key should be specified inside the array.
-        <WordTile word={word}/>
-      )
       return (
           <FlatList style={styles.container} data ={wordList} renderItem = {
             word => <WordTile word={word}/>
@@ -109,10 +92,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log(state)
-  console.log("=====================")
-  console.log("should render words and their exposures")
-
   if(state['library'].length == 1) {
     var words = [
       {

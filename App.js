@@ -1,22 +1,39 @@
-import { createStackNavigator, createSwitchNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createBottomTabNavigator, getActiveChildNavigationOptions } from 'react-navigation';
 
 import Reading from './screens/reading';
 import Library from './screens/library';
 import Words from './screens/words';
 
-const TabNavigator = createBottomTabNavigator({
-  Library: Library,
-  Words: Words,
-});
+const TabNavigator = createBottomTabNavigator(
+  {
+    Library: {
+      screen: Library,
+      navigationOptions: ({ navigation }) => ({
+        title: '📚'
+      }),},
+    Words: {
+      screen: Words,
+      navigationOptions: ({ navigation }) => ({
+        title: '🧠'
+      }),}
+  },
+  {
+    tabBarOptions: {
+      activeBackgroundColor: '#e4e1de',
+      inactiveBackgroundColor: '#fefdfb',
+      labelStyle: {
+        fontSize: 36,
+      },
+    }
+  }
+
+);
 
 const HomeStack = createStackNavigator({
   Tabs: TabNavigator,
   Reading: Reading,
-  /* any other route you want to render above the tab bar */
-  // navigationOptions: ({ navigation }) => ({
-  //   headerShown: 'none',
-  // })
-});
+},
+);
 
 const AppNavigator = createSwitchNavigator({
   Home: HomeStack

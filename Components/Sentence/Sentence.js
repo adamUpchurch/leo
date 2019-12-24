@@ -10,7 +10,7 @@ class Sentence extends Component {
   }
 
   styles = {
-    welcome: {
+    book_text: {
       fontSize: 20,
       textAlign: 'center',
       margin: 10,
@@ -19,7 +19,7 @@ class Sentence extends Component {
 
   render() {
     return (
-      <Text style={this.styles.welcome}>{this.props.text}</Text>
+      <Text style={this.styles.book_text}>{this.props.text}</Text>
     );
   }
 }

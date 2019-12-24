@@ -8,8 +8,10 @@ _retrieveData = async (item, id) => {
 
   try {
     var index = await AsyncStorage.getItem(`${item}:${id}`);
-    console.log(index)
-    return JSON.parse(index).lastReadIndex
+    console.log('======== check index =========')
+    let indexToReturn = JSON.parse(index).lastReadIndex ? JSON.parse(index).lastReadIndex : 0
+    console.log(indexToReturn)
+    return indexToReturn
   } catch (error) {
     // Error retrieving data
     console.log(error)
@@ -169,61 +171,4 @@ module.exports = {
             return [Books]
         }
       },
-      // vocabulary: (state = [], action) => {
-      //   let newState = [...state]
-      //   // AsyncStorage.clear()
-      //   console.log(state)
-      //   console.log(newState)
-
-      //   switch (action.type) {
-
-      //     case 'WORDS':
-      //       books = []
-      //       state[0].forEach(book => {
-      //         let lastReadIndex = _retrieveData('last_read_index', book.index).then( index =>{
-      //           book.index_last_read = index
-      //           books.push(book)
-      //         }
-      //         )
-      //       })
-      //       return [Books]
-          
-      //     case 'UPDATE_WORDS_EXPOSED_TO':
-      //       // case for calling to store last read index
-      //       // checks each book in state for matching _id
-      //       // stores the last_read_index in local storage by calling _storeData
-      //       // returns newState
-      //       console.log('updating words exposed to!')
-      //       const dictionary = action.words.map( (word, index) => {
-
-      //         // check to see if dictionary contains word
-      //         // if so occurences++
-      //         console.log(word)
-      //         console.log(newState)
-      //         if (newState[0].hasOwnProperty(word[0])) {
-      //           console.log('Seen word before - adding 1 to exposure')
-      //           newState[0].word[0].exposures = newState[0].word[0].exposures + 1
-      //         }
-
-      //         else {
-      //           console.log('new words!')
-      //           newState[0].word[0] = {
-      //               text: word[0],
-      //               translated: word[1],
-      //               exposures: 1
-      //           }
-      //         }
-
-      //         // save dictionary to device
-      //         _storeVocab(newState).then(
-      //           nothing => newState
-      //         );
-      //       })
-      //       return newState
-            
-
-      //     default:
-      //       return [newState]
-      //   }
-      // }
 }

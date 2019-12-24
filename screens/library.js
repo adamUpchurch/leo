@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Fragment} from 'react-native';
 import {Books} from '../helper/leo'
@@ -17,7 +9,11 @@ class Library extends Component {
     super(props);
     }
   static navigationOptions = {
-    title: 'Library',
+    title: '📚',
+  };
+
+  static navigationOptions = {
+    headerTitle: () => <Text>Read Leo</Text>,
   };
 
   render() {
@@ -54,30 +50,22 @@ class Library extends Component {
           }/>
       );
     }
-
-
     return (
       <React.Fragment>
         <BookList bookList={library}/>
       </React.Fragment>
-      
     );
   }
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     backgroundColor: '#FEFBF7',
     padding: 10,
   },
   bookContainerTutorial: {
     flex: 1,
     flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center',
     backgroundColor: '#F7FAFE',
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
@@ -85,13 +73,11 @@ const styles = StyleSheet.create({
   bookContainer: {
     flex: 1,
     flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center',
     backgroundColor: '#FEFBF7',
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
+    width: '100%',
   },
-
   bookTileText: {
     color: '#191919',
     fontWeight: 'bold',
@@ -108,14 +94,11 @@ const styles = StyleSheet.create({
     margin: 1,
     paddingBottom: 15,
     paddingTop: 15,
-    
+    marginRight: 15,
   },
 });
-
 const mapStateToProps = state => {
   var library = state.library[0]
-  
   return { library }
 }
-
 export default connect(mapStateToProps)(Library);
