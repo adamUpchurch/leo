@@ -3,6 +3,31 @@ import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Frag
 import {Books} from '../helper/leo'
 import {connect} from 'react-redux'
 
+function BookTile(props) {  
+  const {navigate} = props.navigation;
+  var book = props.book.item
+  return (
+      <TouchableWithoutFeedback onPress={() => {
+        navigate('Reading', {book: book})
+      }}>
+          <View style={styles.bookContainer}>
+            <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
+            <View style={styles.bookTile}>
+              <Text style={styles.bookTileText}>{book.title}</Text>
+              <Text style={styles.bookTileSummary}>{book.author}</Text>
+              { book.author === 'Adam Upchurch' ? <Text style={styles.bookTileSummary}>{book.summary}</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+  )
+}
+
+function BookList(props) {
+  const bookList = props.bookList
+  const navigation = props.navigation
+  return <FlatList style={styles.container} data ={bookList} renderItem={ book => <BookTile navigation={navigation} book={book}/>}/>;
+}
+
 class Library extends Component {
 
   constructor(props) {
@@ -15,48 +40,17 @@ class Library extends Component {
   static navigationOptions = {
     headerTitle: () => <Text>Read Leo</Text>,
   };
-
   render() {
-    const {navigate} = this.props.navigation;
-    var library = this.props.library ? this.props.library : Books
-
-    function BookTile(props) {  
-      var book = props.book.item
-      return (
-          <TouchableWithoutFeedback onPress={() => {
-            navigate('Reading', {book: book})
-          }}>
-              <View style={styles.bookContainer}>
-                <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
-                <View style={styles.bookTile}>
-                  <Text style={styles.bookTileText}>{book.title}</Text>
-                  <Text style={styles.bookTileSummary}>{book.author}</Text>
-                  { book.author === 'Adam Upchurch' ? <Text style={styles.bookTileSummary}>{book.summary}</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-      )
-    }
-
-    function BookList(props) {
-      const bookList = props.bookList
-      const listBooks = bookList.map((book) =>
-        // Correct! Key should be specified inside the array.
-        <BookTile book={book}/>
-      )
-      return (
-          <FlatList style={styles.container} data ={bookList} renderItem = {
-            book => <BookTile book={book}/>
-          }/>
-      );
-    }
+    var library = this.props.library
+    
     return (
       <React.Fragment>
-        <BookList bookList={library}/>
+        <BookList bookList={library} navigation={this.props.navigation}/>
       </React.Fragment>
     );
   }
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -46,7 +46,6 @@ _storeData = async (item, id, value) => {
     
   } catch (error) {
     // Error saving data
-    console.log("ERROR")
     console.log(error)
   }
 };
@@ -62,7 +61,6 @@ _storeVocab = async (value) => {
     
   } catch (error) {
     // Error saving data
-    console.log("ERROR")
     console.log(error)
   }
 };
@@ -113,51 +111,33 @@ module.exports = {
             })
             return newState
 
-            case 'UPDATE_WORDS_EXPOSED_TO':
-              // case for calling to store last read index
-              // checks each book in state for matching _id
-              // stores the last_read_index in local storage by calling _storeData
-              // returns newState
-              console.log('updating words exposed to!')
-              const dictionary = action.words.map( (word, index) => {
-  
-                // check to see if dictionary contains word
-                // if so occurences++
-                console.log(word)
-                console.log(newState)
-
-                if(newState.length == 1) {
-                  newState.push(Object)
-                  console.log(newState)
+          case 'UPDATE_WORDS_EXPOSED_TO':
+            // case for calling to store last read index
+            // checks each book in state for matching _id
+            // stores the last_read_index in local storage by calling _storeData
+            // returns newState
+            const dictionary = action.words.map( (word, index) => {
+              if(newState.length == 1) {
+                newState.push(Object)
+              }
+              word = word.map(word => word.toLowerCase())
+              if (newState[1].hasOwnProperty(`${word[0]}`)) {
+                newState[1][`${word[0]}`].exposures = newState[1][`${word[0]}`].exposures + 1
+              }
+              else {
+                newState[1][word[0]] = {
+                    text: word[0],
+                    translated: word[1],
+                    exposures: 1
                 }
-
-                word = word.map(word => word.toLowerCase())
-
-                if (newState[1].hasOwnProperty(`${word[0]}`)) {
-                  console.log('Seen word before - adding 1 to exposure')
-                  newState[1][`${word[0]}`].exposures = newState[1][`${word[0]}`].exposures + 1
-                }
-  
-                else {
-                  console.log('new words!')
-                  console.log(`Adding ${word[0]} - ${word[1]}`)
-                  newState[1][word[0]] = {
-                      text: word[0],
-                      translated: word[1],
-                      exposures: 1
-                  }
-                }
-  
-                // save dictionary to device
-                _storeVocab(newState).then(
-                  nothing => newState
-                );
-              })
-              return newState
-            
-
+              }
+              // save dictionary to device
+              _storeVocab(newState).then(
+                nothing => newState
+              );
+            })
+            return newState
           default:
-
           // Retrieve last read index for each book, set the index value to .index_last_read before returning
             Books.forEach((book, index) => {
               _retrieveData('last_read_index', book._id).then( value =>{

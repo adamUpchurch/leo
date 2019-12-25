@@ -21,6 +21,7 @@ class Reading extends Component {
   nextSentence() {
     this.props.updateVocabulary(this.state.book.text["esp"][this.state.currentSentenceIndex]["translated"])
     const currentSentenceIndex = this.state.currentSentenceIndex + 1
+  
     this.props.indexRecent(this.state.book._id, currentSentenceIndex, this.state.book.title)
     this.setState({
       currentSentenceIndex
@@ -66,6 +67,7 @@ class Reading extends Component {
   render() {
     this.storeData
     currentText = this.state.book.text
+    
     return (
       <View style={styles.mainContainer}>
         <View style={{display:'flex', flexDirection:'row'}}>

@@ -11,7 +11,7 @@ class Sentence extends Component {
 
   styles = {
     book_text: {
-      fontSize: 20,
+      fontSize: 22,
       textAlign: 'center',
       margin: 10,
     },
