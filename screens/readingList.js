@@ -30,15 +30,10 @@ class Library extends Component {
     const {navigate} = this.props.navigation;
 
     book = book.item
-    const bookInfo = {
-      bookID: book._id,
-      authorName: book.author,
-      bookTitle: book.title,
-      isCurrentlyReading: book.isCurrentlyReading
-    }
+
     return (
         <TouchableWithoutFeedback onPress={() => navigate('Reading', {book: book})}
-        onLongPress={() => this.setState({ isModalVisible: true, bookInfo: bookInfo })}
+        onLongPress={() => this.setState({ isModalVisible: true, bookInfo: book })}
         >
             <View style={styles.bookContainer}>
               <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
@@ -73,7 +68,10 @@ class Library extends Component {
             onTouchOutside={()=> this.setState({ isModalVisible: false })}
           >
             <ModalContent>               
-               <TouchableWithoutFeedback onPress={() => console.log("Book Details")}>
+            <TouchableWithoutFeedback onPress={() => {
+              this.props.navigation.navigate('BookDetail', {bookInfo: this.state.bookInfo})
+              this.closeModal()
+              }}>
                <View style={styles.ModalContent}>
                   <Text style={{ fontSize: 20, alignSelf: 'auto'}}>ℹ book details</Text>
                 </View>

@@ -5,23 +5,18 @@ import Library from './screens/libraryList';
 import Bookshelf from './screens/readingList';
 import Words from './screens/wordMagician';
 import FlashCard from './screens/flashCard';
+import BookDetail from './screens/bookDetail';
 
 const TabNavigator = createBottomTabNavigator(
   {
     Bookshelf: {
       screen: Bookshelf,
-      params: {
-        isReading: true
-      },
       navigationOptions: ({ navigation }) => ({
         title: '📖'
       }),
     },
     Library: {
       screen: Library,
-      params: {
-        isReading: false
-      },
       navigationOptions: ({ navigation }) => ({
         title: '📚'
       }),
@@ -47,7 +42,7 @@ const TabNavigator = createBottomTabNavigator(
 const HomeStack = createStackNavigator({
   Tabs: TabNavigator,
   Reading: Reading,
-  // FlashCard: FlashCard,
+  BookDetail: BookDetail,
 },
 );
 
