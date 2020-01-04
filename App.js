@@ -10,14 +10,22 @@ const TabNavigator = createBottomTabNavigator(
   {
     Bookshelf: {
       screen: Bookshelf,
+      params: {
+        isReading: true
+      },
       navigationOptions: ({ navigation }) => ({
         title: '📖'
-      }),},
+      }),
+    },
     Library: {
-    screen: Library,
-    navigationOptions: ({ navigation }) => ({
-      title: '📚'
-    }),},
+      screen: Library,
+      params: {
+        isReading: false
+      },
+      navigationOptions: ({ navigation }) => ({
+        title: '📚'
+      }),
+    },
     Words: {
       screen: Words,
       navigationOptions: ({ navigation }) => ({

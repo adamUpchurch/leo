@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Alert} from 'react-native';
-import {Books} from '../helper/leo';
+import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
 import Modal, { ModalContent } from 'react-native-modals';
+import {toggleIsReading} from '../helper/actions/index'
+
 
 
 
@@ -27,12 +28,13 @@ class Library extends Component {
 
   BookTile(book) {  
     const {navigate} = this.props.navigation;
-    console.log(book)
+
     book = book.item
     const bookInfo = {
       bookID: book._id,
       authorName: book.author,
-      bookTitle: book.title
+      bookTitle: book.title,
+      isCurrentlyReading: book.isCurrentlyReading
     }
     return (
         <TouchableWithoutFeedback onPress={() => navigate('Reading', {book: book})}
@@ -54,6 +56,10 @@ class Library extends Component {
     return <FlatList style={styles.container} data ={this.props.library} renderItem={ book => this.BookTile(book)} keyExtractor={book => book._id}/>;
   }
 
+  updateIsReading() {
+    this.props.toggleIsReading(this.state.bookInfo)
+  }
+
 
 
   static navigationOptions = {
@@ -72,7 +78,10 @@ class Library extends Component {
                   <Text style={{ fontSize: 20, alignSelf: 'auto'}}>ℹ book details</Text>
                 </View>
                </TouchableWithoutFeedback>
-               <TouchableWithoutFeedback onPress={() => console.log("Add to Reading List")}>
+               <TouchableWithoutFeedback onPress={() => {
+                 this.updateIsReading()
+                 this.closeModal()
+                 }}>
                <View style={styles.ModalContent}>
                   <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`📔 Remove from reading list`}</Text>
                 </View>
@@ -96,30 +105,9 @@ class Library extends Component {
                     })
                 }>
                 <View style={styles.ModalContent}>
-                    <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`👍 Did you love the book?!`}</Text>
+                    <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`👍 Do you love the book?!`}</Text>
                   </View>
                 </TouchableWithoutFeedback>
-                {/* <TouchableWithoutFeedback onPress={() => fetch('http://localhost:3000/bookReview/create', {
-                    method: 'POST',
-                    headers: {
-                      Accept: 'application/json',
-                      'Content-Type': 'application/json',
-                      'user': true,
-                    },
-                    body: JSON.stringify({...this.state.bookInfo, ...{isGoodReview: false}})
-                  })
-                    .then(res => res.json())
-                    .then(res => {
-                      alert('Thanks for review the book!')
-                    })
-                    .catch(error => {
-                      handleError(error, false);
-                    })
-                }>
-                <View style={styles.ModalContent}>
-                    <Text style={{ fontSize: 20, alignSelf: 'auto'}}>👎</Text>
-                  </View>
-                </TouchableWithoutFeedback> */}
                </View>
             </ModalContent>
           </Modal>
@@ -178,8 +166,9 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  var library = state.library[0]
+  var library = state.library
+
   library = library.filter(book => book.isCurrentlyReading)
   return { library }
 }
-export default connect(mapStateToProps)(Library);
+export default connect(mapStateToProps, {toggleIsReading})(Library);
