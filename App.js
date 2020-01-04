@@ -3,6 +3,7 @@ import { createStackNavigator, createSwitchNavigator, createBottomTabNavigator, 
 import Reading from './screens/reading';
 import Library from './screens/library';
 import Words from './screens/words';
+import FlashCard from './screens/flashCard';
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -14,7 +15,7 @@ const TabNavigator = createBottomTabNavigator(
     Words: {
       screen: Words,
       navigationOptions: ({ navigation }) => ({
-        title: '🧠'
+        title: '🧙‍♂️'
       }),}
   },
   {
@@ -32,6 +33,7 @@ const TabNavigator = createBottomTabNavigator(
 const HomeStack = createStackNavigator({
   Tabs: TabNavigator,
   Reading: Reading,
+  // FlashCard: FlashCard,
 },
 );
 

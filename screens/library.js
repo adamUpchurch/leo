@@ -7,9 +7,9 @@ function BookTile(props) {
   const {navigate} = props.navigation;
   var book = props.book.item
   return (
-      <TouchableWithoutFeedback onPress={() => {
-        navigate('Reading', {book: book})
-      }}>
+      <TouchableWithoutFeedback onPress={() => navigate('Reading', {book: book})}
+      // onLongPress={() => this.setState({ visible: true })}
+      >
           <View style={styles.bookContainer}>
             <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
             <View style={styles.bookTile}>

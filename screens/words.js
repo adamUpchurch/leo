@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
   },
   WordTile: {
     height: 55,
-    // margin: 1,
     alignItems: 'center',
     paddingBottom: 15,
     paddingTop: 15,
