@@ -91,20 +91,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  if(state['library'].length == 1) {
-    var words = [
-      {
-        text: "hola",
-        translated: "hello",
-        exposures: 1
-      }
-    ]  
-    return { words }
-  }
-  else {
-    words = Object.values(state['library'][1])
-    return { words }
-  }
+  console.log(state)
+  words = Object.values(state['vocabulary'])
+  console.log(words)
+  return { words }
 }
 
 export default connect(mapStateToProps)(Words);

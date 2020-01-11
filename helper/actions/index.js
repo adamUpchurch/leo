@@ -1,23 +1,16 @@
 
 module.exports = {
-    indexRecent: (bookID, indexFurthestRead, title)=> {
+    indexRecent: (book, currentIndex)=> {
         return {    
             type: 'LAST_READ_INDEX',
-            bookID,
-            indexFurthestRead,
-            title
+            book,
+            currentIndex,
         }
     },
-    library: (books) =>{
-        return {
-            type: 'LIBRARY',
-            books
-        }
-    },
-    toggleIsReading: (bookInfo) => {
+    toggleIsReading: (book) => {
         return {
             type: 'TOGGLE_IS_CURRENTLY_READING',
-            bookInfo
+            book
         }
     },
     updateVocabulary: (words) => {

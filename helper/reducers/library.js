@@ -9,7 +9,7 @@ _retrieveData = async (id) => {
   try {
     var index = await AsyncStorage.getItem(`${id}`);
     // let indexToReturn = JSON.parse(index).lastReadIndex ? JSON.parse(index).lastReadIndex : 0
-    return JSON.parse(index)
+    return JSON.parse(index.then(result => result))
   } catch (error) {
     // Error retrieving data
     console.log(error)
@@ -43,7 +43,7 @@ _storeData = async (id, delta) => {
   }
 };
 
-_retrieveVocab = async (item, id) => {
+_retrieveVocab = async () => {
   // try to get value from local storage
   // might need to change up how to parse for lastReadIndex
   // could change it to [a_key] so can parse whatever key we call for 
@@ -62,10 +62,7 @@ _storeVocab = async (value) => {
   // storing data, might need to add layer of protection to ensure not store index over the lenght of the book.
   // trying on receiving end. Might be worth doing it here?? Or trying to fix it before it hits here in the reading pane
   try {
-    let index = {
-      vovabulary: value
-    }
-    let vocab = await AsyncStorage.setItem(`vocabulary`, JSON.stringify(index));
+    let vocab = await AsyncStorage.setItem(`vocabulary`, JSON.stringify(value));
     
   } catch (error) {
     // Error saving data
@@ -75,13 +72,13 @@ _storeVocab = async (value) => {
 
 module.exports = {
     library: (state = [], action) => {
-        let newState = [...state]
-        // AsyncStorage.clear()
+      // AsyncStorage.clear()
+      console.log('=======Library=========')
+      console.log(state)
+      console.log(action)
+      let newState = [...state] 
 
         switch (action.type) {
-          
-          case 'LIBRARY':
-            return Books.map((book) => ({...book, ..._retrieveData(book._id)}))
           
           case 'LAST_READ_INDEX':
             // case for calling to store last read index
@@ -93,6 +90,7 @@ module.exports = {
 
               // ensuring same book to save last read index
               if (book._id === action.bookID) {
+                book.isCurrentlyReading = true;
 
                 //checking to see if last read indexToStore is greater than what is saved
                 if (book.index_last_read < action.indexFurthestRead){
@@ -102,7 +100,7 @@ module.exports = {
                   
                   // if so -- setting newState index to indexToStore then saving to local device
                   book.index_last_read = indexToStore
-                  book.isCurrentlyReading = true;
+                  
                   delta = {
                     index_last_read: indexToStore,
                     isCurrentlyReading: true,
@@ -112,9 +110,8 @@ module.exports = {
                   return book
                 }
               }
-              else {
-                return book
-              }
+              
+              return book
             })
             console.log("&&&&& This is the newState")
             console.log(newState)
@@ -130,8 +127,8 @@ module.exports = {
             newState = newState.map( (book, index) => {
 
               // ensuring same book to save last read index
-              if (book._id === action.bookInfo.bookID) {
-                var valueToStore = !action.bookInfo.isCurrentlyReading
+              if (book._id === action.book._id) {
+                var valueToStore = !action.book.isCurrentlyReading
                 delta = {
                   isCurrentlyReading: valueToStore
                 }
@@ -143,34 +140,49 @@ module.exports = {
             })
             return newState
 
+          default:
+            return Books.map((book) => ({...book, ..._retrieveData(book._id)}))
+        }
+      },
+    vocabulary: (state = {bienvinidos: {text: "bienvinidos",translated: "welcome", exposures: 1}}, action) => {
+        let newState = {...state}
+        AsyncStorage.clear()
+        console.log('=======Vocab=========')
+        console.log(newState)
+        console.log(action)
+
+        switch (action.type) {
           case 'UPDATE_WORDS_EXPOSED_TO':
             // case for calling to store last read index
             // checks each book in state for matching _id
             // stores the last_read_index in local storage by calling _storeData
             // returns newState
-            const dictionary = action.words.map( (word, index) => {
-              if(newState.length == 1) {
-                newState.push(Object)
-              }
+
+            var deltaState = {}
+            
+            action.words.map( word => {
               word = word.map(word => word.toLowerCase())
-              if (newState[1].hasOwnProperty(`${word[0]}`)) {
-                newState[1][`${word[0]}`].exposures = newState[1][`${word[0]}`].exposures + 1
+              deltaState[word[0]] = {
+                  text: word[0],
+                  translated: word[1],
+                  exposures: 0
               }
-              else {
-                newState[1][word[0]] = {
-                    text: word[0],
-                    translated: word[1],
-                    exposures: 1
-                }
+              if (newState.hasOwnProperty(word[0])) {
+                  deltaState[word[0]].exposures = newState[`${word[0]}`].exposures + 1
               }
-              // save dictionary to device
-              _storeVocab(newState).then(
-                nothing => newState
-              );
+              
             })
+            newState = {...newState, ...deltaState}
+            // save dictionary to device
+            _storeVocab(newState)
             return newState
+            
           default:
-            return Books.map((book) => ({...book, ..._retrieveData(book._id)}))
+            // retrievedVocab = _retrieveVocab()
+            // console.log("retrievedVocab!!!")
+            // console.log(retrievedVocab)
+            // newState = {...newState, ...retrievedVocab}
+            return newState
         }
       },
 }

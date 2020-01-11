@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   var library = state.library
 
-  library = library.filter(book => !book.isCurrentlyReading)
+  var library = Object.values(state.library).filter(book => !book.isCurrentlyReading)
   return { library }
 }
 export default connect(mapStateToProps, {toggleIsReading})(Library);

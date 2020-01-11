@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import {library} from './library'
+import {library, vocabulary} from './library'
 
 export default combineReducers({
   library: library,
-  // vocabulary: vocabulary
+  vocabulary: vocabulary
 })

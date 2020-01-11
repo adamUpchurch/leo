@@ -13,16 +13,18 @@ class Reading extends Component {
     super(props);
     const bookReading = this.props.navigation.getParam('book', 'what book is this?')
     this.state = {
-      currentSentenceIndex: bookReading.index_last_read,
+      currentSentenceIndex: bookReading.index_last_read ? bookReading.index_last_read : 0,
       book: bookReading,
       visible: false
     };
+    console.log(bookReading)
+    console.log(this.state)
   }  
   nextSentence() {
-    this.props.updateVocabulary(this.state.book.text["esp"][this.state.currentSentenceIndex]["translated"])
+    this.props.updateVocabulary(this.state.book.text.esp[this.state.currentSentenceIndex]["translated"])
     const currentSentenceIndex = this.state.currentSentenceIndex + 1
   
-    this.props.indexRecent(this.state.book._id, currentSentenceIndex, this.state.book.title)
+    this.props.indexRecent(this.state.book, currentSentenceIndex)
     this.setState({
       currentSentenceIndex
     });
@@ -69,7 +71,6 @@ class Reading extends Component {
   }
 
   render() {
-    this.storeData
     currentText = this.state.book.text
     
     return (
