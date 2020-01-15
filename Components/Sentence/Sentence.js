@@ -4,6 +4,7 @@ import {Text} from 'react-native';
 class Sentence extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props)
     this.state = {
       titleText: "Title",
     };
