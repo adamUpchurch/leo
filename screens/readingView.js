@@ -74,8 +74,6 @@ class Reading extends Component {
 
   render() {
     let currentText = this.state.book.text
-    console.log('==============================================')
-    console.log(currentText)
     
     return (
       <View style={styles.mainContainer}>
@@ -131,11 +129,6 @@ class Reading extends Component {
                   <Text style={styles.modal_text}>{`${element[0]} - ${element[1]}`}</Text>
                 ))
               }
-              {/* <View style={styles.container}>
-                <FlatList 
-                  data ={currentText.esp[this.state.book.index_last_read].translated} 
-                  renderItem={ text => this.translationText(text)}/>
-              </View> */}
             </ModalContent>
           </Modal>
           <View style={{display: 'flex', flexDirection: 'row', zIndex:1}}>

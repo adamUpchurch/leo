@@ -20,7 +20,6 @@ class Words extends Component {
       var word = props.word.item
       return (
           <TouchableWithoutFeedback onPress={() => {
-            // navigate to initiate flashcard game????
           }}>
               <View style={styles.wordContainer}>
                 <View style={styles.WordTile}>
@@ -136,11 +135,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log(state)
   words = Object.values(state['vocabulary'].vocab)
   learningData = state['vocabulary']
-  
-  console.log(learningData)
   return { words, learningData }
 }
 

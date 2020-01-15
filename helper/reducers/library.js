@@ -35,43 +35,25 @@ _storeData = (location, value) => {
 
 module.exports = {
     library: (state = {}, action) => {
-      AsyncStorage.clear()
       let newState = {...state}
-      console.log('===============')
-      console.log(action)
-      console.log(newState)
-
         switch (action.type) {
           
           case 'LAST_READ_INDEX':
-            // case for calling to store last read index
-            // checks each book in state for matching _id
-            // stores the last_read_index in local storage by calling _storeData
-            // returns newState
             delta = {
               isCurrentlyReading: true,
               index_last_read: action.book.index_last_read
             }
-            console.log('LAST_READ_INDEXXXXXxxxxxx')
-            console.log(action.book)
             newState[action.book._id] = {...newState[action.book._id], ...delta}
-            console.log(newState)
             _storeData('LIBRARY', newState)
             return newState
 
           case 'TOGGLE_IS_CURRENTLY_READING':
-            // case for calling to toggle whether user is reading book
-            // checks each book in state for matching _id
-            // toggles is_currently_reading in local storage by calling _storeData
-            // returns newState
             newState[action.book._id].isCurrentlyReading = !newState[action.book._id].isCurrentlyReading
             _storeData('LIBRARY', newState)
 
             return newState
           default:
             retrievedData = _retrieveData('LIBRARY')
-            console.log("LIBRARY!!!")
-            console.log(retrievedData)
             newState = {...newState, ...retrievedData}
 
             return {...Books, ...newState}
@@ -79,16 +61,10 @@ module.exports = {
       },
     vocabulary: (state = {totalWordsExposedTo: 1, mostDayStreak:1, currentDayStreak: 1, lastReadDay: new Date(), streakStartDay: new Date(), streakStartWeek: new Date(), mostWeekStreak: 1, currentWeekStreak: 1, vocab: {bienvinidos: {text: "bienvinidos",translated: "welcome", exposures: 1}}}, action) => {
         let newState = {...state}
-        AsyncStorage.clear()
 
 
         switch (action.type) {
           case 'UPDATE_WORDS_EXPOSED_TO':
-            // case for calling to store last read index
-            // checks each book in state for matching _id
-            // stores the last_read_index in local storage by calling _storeData
-            // returns newState
-
             var deltaVocab = {}
             
             action.words.map( word => {
@@ -126,16 +102,11 @@ module.exports = {
             newState.mostDayStreak = (newState.mostDayStreak > newState.currentDayStreak) ? newState.mostDayStreak : newState.currentDayStreak
             newState.mostWeekStreak = (newState.mostWeekStreak > newState.currentWeekStreak) ? newState.mostWeekStreak : newState.currentWeekStreak
 
-
-            
-            // save dictionary to device
             _storeData('VOCABULARY', newState)
             return newState
             
           default:
             retrievedVocab = _retrieveData('VOCABULARY')
-            console.log("VOCABULARY!!!")
-            console.log(retrievedVocab)
             newState = {...newState, ...retrievedVocab}
             return newState
         }
