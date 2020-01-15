@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback,TouchableHighlight, Text, FlatList} from 'react-native';
-import Sentence from '../Components/Sentence/Sentence';
+import {StyleSheet, View, TouchableWithoutFeedback,TouchableHighlight, Text} from 'react-native';
 import Modal, { ModalContent } from 'react-native-modals';
 
 import {connect} from 'react-redux'
@@ -112,10 +111,10 @@ class Reading extends Component {
         </View>
         <View style={styles.container}>
           <View style={{alignContent:'flex-start', paddingBottom: 20}}>
-            <Sentence text={currentText.en[this.state.book.index_last_read]}/>
+            <Text style={this.styles.book_text}>{currentText.en[this.state.book.index_last_read]}</Text>
             <TouchableHighlight style={styles.button} onLongPress={() => { this.setState({ visible: true });}}>
               <View style={styles.button}>
-                <Sentence text={currentText.esp[this.state.book.index_last_read].text}/>
+              <Text style={this.styles.book_text}>{currentText.esp[this.state.book.index_last_read].text}</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -165,6 +164,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#FEFBF7',
+  },
+  book_text: {
+    fontSize: 22,
+    textAlign: 'center',
+    margin: 10,
   },
 });
 export default connect(null, {indexRecent, updateVocabulary})(Reading);
