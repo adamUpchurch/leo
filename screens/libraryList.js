@@ -4,6 +4,10 @@ import {connect} from 'react-redux';
 import Modal, { ModalContent } from 'react-native-modals';
 import {toggleIsReading} from '../helper/actions/index'
 
+
+
+
+
 class Library extends Component {
 
   constructor(props) {
@@ -160,9 +164,9 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  console.log(state)
-  var library = Object.values(state.library).filter(book => book.isCurrentlyReading)
-  console.log(library)
+  var library = state.library
+
+  var library = Object.values(state.library).filter(book => !book.isCurrentlyReading)
   return { library }
 }
 export default connect(mapStateToProps, {toggleIsReading})(Library);

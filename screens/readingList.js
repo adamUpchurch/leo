@@ -36,7 +36,7 @@ class Library extends Component {
               <View style={styles.bookTile}>
                 <Text style={styles.bookTileText}>{book.title}</Text>
                 <Text style={styles.bookTileSummary}>{book.author}</Text>
-                { book.author === 'Adam Upchurch' ? <Text style={styles.bookTileSummary}>{book.summary}</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
+                { book.author === 'Adam' ? <Text style={styles.bookTileSummary}>Read this first</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
               </View>
             </View>
           </TouchableWithoutFeedback>

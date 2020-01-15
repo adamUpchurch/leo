@@ -1,9 +1,9 @@
+
 module.exports = {
-    indexRecent: (book, currentIndex)=> {
+    indexRecent: (book)=> {
         return {    
             type: 'LAST_READ_INDEX',
             book,
-            currentIndex,
         }
     },
     toggleIsReading: (book) => {
@@ -20,3 +20,27 @@ module.exports = {
     },
 
 }
+
+
+// export function indexRecent(bookID, indexFurthestRead, title){
+//     return {    
+//         type: 'LAST_READ_INDEX',
+//         bookID,
+//         indexFurthestRead,
+//         title
+//     }
+// }
+
+// export function updateVocabulary(words){
+//     return {    
+//         type: 'UPDATE_WORDS_EXPOSED_TO',
+//         words
+//     }
+// }
+
+// export function library(books){
+//     return {
+//         type: 'LIBRARY',
+//         books
+//     }
+// }

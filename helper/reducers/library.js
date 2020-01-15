@@ -1,63 +1,31 @@
 import Books from './BookList.json'
 import AsyncStorage from '@react-native-community/async-storage';
 
-_retrieveData = async (item, id) => {
+_retrieveData = (location) => {
   // try to get value from local storage
   // might need to change up how to parse for lastReadIndex
   // could change it to [a_key] so can parse whatever key we call for 
-
+  console.log('Retrieving data')
   try {
-    var index = await AsyncStorage.getItem(`${item}:${id}`);
-    console.log('======== check index =========')
-    let indexToReturn = JSON.parse(index).lastReadIndex ? JSON.parse(index).lastReadIndex : 0
-    console.log(indexToReturn)
-    return indexToReturn
+    var index = AsyncStorage.getItem(location, (err, result) => result).then(result => result)
+    if (index !== null) {
+      // We have data!!
+      console.log(index);
+      console.log(index.then(result => result));
+      return JSON.parse(index)
+    }
   } catch (error) {
     // Error retrieving data
     console.log(error)
-    return 0
+    return null
   }
 };
 
-_retrieveVocab = async (item, id) => {
-  // try to get value from local storage
-  // might need to change up how to parse for lastReadIndex
-  // could change it to [a_key] so can parse whatever key we call for 
-
-  try {
-    var index = await AsyncStorage.getItem(`vocabulary`);
-    console.log(index)
-    return JSON.parse(index)
-  } catch (error) {
-    // Error retrieving data
-    console.log(error)
-    return 0
-  }
-};
-
-_storeData = async (item, id, value) => {
+_storeData = (location, value) => {
   // storing data, might need to add layer of protection to ensure not store index over the lenght of the book.
   // trying on receiving end. Might be worth doing it here?? Or trying to fix it before it hits here in the reading pane
   try {
-    let index = {
-      lastReadIndex: value
-    }
-    await AsyncStorage.setItem(`${item}:${id}`, JSON.stringify(index));
-    
-  } catch (error) {
-    // Error saving data
-    console.log(error)
-  }
-};
-
-_storeVocab = async (value) => {
-  // storing data, might need to add layer of protection to ensure not store index over the lenght of the book.
-  // trying on receiving end. Might be worth doing it here?? Or trying to fix it before it hits here in the reading pane
-  try {
-    let index = {
-      vovabulary: value
-    }
-    await AsyncStorage.setItem(`vocabulary`, JSON.stringify(index));
+    let vocab = AsyncStorage.mergeItem(location, JSON.stringify(value));
     
   } catch (error) {
     // Error saving data
@@ -66,89 +34,110 @@ _storeVocab = async (value) => {
 };
 
 module.exports = {
-    library: (state = [], action) => {
-        let newState = [...state]
-        // AsyncStorage.clear()
+    library: (state = {}, action) => {
+      AsyncStorage.clear()
+      let newState = {...state}
+      console.log('===============')
+      console.log(action)
+      console.log(newState)
 
         switch (action.type) {
-          
-          case 'LIBRARY':
-            books = []
-            state[0].forEach(book => {
-              let lastReadIndex = _retrieveData('last_read_index', book.index).then( index =>{
-                book.index_last_read = index
-                books.push(book)
-              }
-              )
-            })
-            return [Books]
           
           case 'LAST_READ_INDEX':
             // case for calling to store last read index
             // checks each book in state for matching _id
             // stores the last_read_index in local storage by calling _storeData
             // returns newState
-
-            const book = state[0].map( (book, index) => {
-
-              // ensuring same book to save last read index
-              if (book._id === action.bookID) {
-
-                //checking to see if last read indexToStore is greater than what is saved
-                if (newState[0][index].index_last_read < action.indexFurthestRead){
-                  // check to see if index furthest read is higher than lenght of book
-                  // Set to index or reset back to back to 0
-                  var indexToStore = action.indexFurthestRead < book.text.en.length ? action.indexFurthestRead : 0
-                  
-                  // if so -- setting newState index to indexToStore then saving to local device
-                  newState[0][index].index_last_read = indexToStore
-                  
-                  _storeData('last_read_index', book._id, indexToStore).then(
-                    nothing => newState
-                  );
-                }
-              }
-            })
+            delta = {
+              isCurrentlyReading: true,
+              index_last_read: action.book.index_last_read
+            }
+            console.log('LAST_READ_INDEXXXXXxxxxxx')
+            console.log(action.book)
+            newState[action.book._id] = {...newState[action.book._id], ...delta}
+            console.log(newState)
+            _storeData('LIBRARY', newState)
             return newState
 
+          case 'TOGGLE_IS_CURRENTLY_READING':
+            // case for calling to toggle whether user is reading book
+            // checks each book in state for matching _id
+            // toggles is_currently_reading in local storage by calling _storeData
+            // returns newState
+            newState[action.book._id].isCurrentlyReading = !newState[action.book._id].isCurrentlyReading
+            _storeData('LIBRARY', newState)
+
+            return newState
+          default:
+            retrievedData = _retrieveData('LIBRARY')
+            console.log("LIBRARY!!!")
+            console.log(retrievedData)
+            newState = {...newState, ...retrievedData}
+
+            return {...Books, ...newState}
+        }
+      },
+    vocabulary: (state = {totalWordsExposedTo: 1, mostDayStreak:1, currentDayStreak: 1, lastReadDay: new Date(), streakStartDay: new Date(), streakStartWeek: new Date(), mostWeekStreak: 1, currentWeekStreak: 1, vocab: {bienvinidos: {text: "bienvinidos",translated: "welcome", exposures: 1}}}, action) => {
+        let newState = {...state}
+        AsyncStorage.clear()
+
+
+        switch (action.type) {
           case 'UPDATE_WORDS_EXPOSED_TO':
             // case for calling to store last read index
             // checks each book in state for matching _id
             // stores the last_read_index in local storage by calling _storeData
             // returns newState
-            const dictionary = action.words.map( (word, index) => {
-              if(newState.length == 1) {
-                newState.push(Object)
-              }
+
+            var deltaVocab = {}
+            
+            action.words.map( word => {
               word = word.map(word => word.toLowerCase())
-              if (newState[1].hasOwnProperty(`${word[0]}`)) {
-                newState[1][`${word[0]}`].exposures = newState[1][`${word[0]}`].exposures + 1
+              var exposures;
+              if (newState.vocab.hasOwnProperty(word[0])) {
+                exposures = newState.vocab[`${word[0]}`].exposures + 1
               }
               else {
-                newState[1][word[0]] = {
-                    text: word[0],
-                    translated: word[1],
-                    exposures: 1
-                }
+                exposures = 1
               }
-              // save dictionary to device
-              _storeVocab(newState).then(
-                nothing => newState
-              );
+              deltaVocab[word[0]] = {
+                  text: word[0],
+                  translated: word[1],
+                  exposures: exposures
+              }
+              
             })
+            newState.totalWordsExposedTo = newState.totalWordsExposedTo + action.words.length;
+            newState.vocab = {...newState.vocab, ...deltaVocab}
+            
+            let now = new Date()
+
+            if(now > (newState.lastReadDay + 86400000*2)) {
+              newState.streakStartDay = now
+            }
+
+            if(now > (newState.lastReadDay + 604800000*2)) {
+              newState.streakStartWeek = now
+            }
+            
+            newState.lastReadDay = now
+            newState.currentDayStreak = newState.lastReadDay - newState.streakStartDay
+            newState.currentWeekStreak = newState.lastReadDay - newState.streakStartWeek
+            newState.mostDayStreak = (newState.mostDayStreak > newState.currentDayStreak) ? newState.mostDayStreak : newState.currentDayStreak
+            newState.mostWeekStreak = (newState.mostWeekStreak > newState.currentWeekStreak) ? newState.mostWeekStreak : newState.currentWeekStreak
+
+
+            
+            // save dictionary to device
+            _storeData('VOCABULARY', newState)
             return newState
+            
           default:
-          // Retrieve last read index for each book, set the index value to .index_last_read before returning
-            Books.forEach((book, index) => {
-              _retrieveData('last_read_index', book._id).then( value =>{
-                // Check is index value is not null or set to 0
-                var indexValue = value ? value : 0
-                // Check to see if indexValue is greater than length of book - if so, reset to 0
-                Books[index].index_last_read = indexValue < book.text.en.length ? indexValue : 0
-              }
-              )
-            })
-            return [Books]
+            retrievedVocab = _retrieveData('VOCABULARY')
+            console.log("VOCABULARY!!!")
+            console.log(retrievedVocab)
+            newState = {...newState, ...retrievedVocab}
+            return newState
         }
-      },
+      }
 }

@@ -45,6 +45,8 @@ class Library extends Component {
             <View style={styles.bookDetail}>
               <View style={styles.bookTile}>
                 <Text style={styles.bookHeader}>Detail</Text>
+                <Text style={styles.detailText}>Completion: {(book.index_furthest / book.text.en.length).toFixed(2) * 100}%</Text>
+                <Text style={styles.detailText}>Reading Level: {book.grade_level}</Text>
                 <Text style={styles.detailText}>Total Words: {book.word_count}</Text>
                 <Text style={styles.detailText}>Unique Words: {book.unique_words}</Text>
                 <Text style={styles.detailText}>Original Language: {book.originalLanguage ? book.originalLanguage : "English"}</Text>
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   var library = state.library
 
-  library = library.filter(book => book.isCurrentlyReading)
+  library = Object.values(Library).filter(book => book.isCurrentlyReading)
   return { library }
 }
 export default connect(mapStateToProps, {toggleIsReading})(Library);

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback,TouchableHighlight, Text} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback,TouchableHighlight, Text, FlatList} from 'react-native';
 import Sentence from '../Components/Sentence/Sentence';
 import Modal, { ModalContent } from 'react-native-modals';
 
@@ -12,27 +12,24 @@ class Reading extends Component {
   constructor(props) {
     super(props);
     const bookReading = this.props.navigation.getParam('book', 'what book is this?')
+    console.log("Readdign this booook")
     this.state = {
-      currentSentenceIndex: bookReading.index_last_read ? bookReading.index_last_read : 0,
       book: bookReading,
       visible: false
     };
-    console.log(bookReading)
-    console.log(this.state)
+
   }  
   nextSentence() {
-    this.props.updateVocabulary(this.state.book.text.esp[this.state.currentSentenceIndex]["translated"])
-    const currentSentenceIndex = this.state.currentSentenceIndex + 1
-  
-    this.props.indexRecent(this.state.book, currentSentenceIndex)
-    this.setState({
-      currentSentenceIndex
-    });
-    if (this.state.currentSentenceIndex > this.state.book.text.en.length - 2) {
-      this.setState({
-        currentSentenceIndex: 0
-      });
+    this.props.updateVocabulary(this.state.book.text.esp[this.state.book.index_last_read]["translated"])
+    var updatedIndex = {index_last_read: this.state.book.index_last_read + 1}
+    
+    if (this.state.book.index_last_read > this.state.book.text.en.length - 2) {
+      updatedIndex = {index_last_read: 0}
     }
+    this.setState({
+      book: {...this.state.book, ...updatedIndex}
+    });
+    this.props.indexRecent(this.state.book)
   }
 
   closeModal() {
@@ -40,8 +37,9 @@ class Reading extends Component {
   }
 
   lastSentence() {
+    let book = {index_last_read: this.state.book.index_last_read > 0 ? this.state.book.index_last_read - 1 : 0}
     this.setState({
-      currentSentenceIndex: this.state.currentSentenceIndex > 0 ? this.state.currentSentenceIndex - 1 : 0
+      book: {...this.state.book, ...book}
     });
   }
   report_translation() {
@@ -54,10 +52,10 @@ class Reading extends Component {
         'user': true,
       },
       body: JSON.stringify({
-        sentenceIndex: this.state.currentSentenceIndex,
+        sentenceIndex: this.state.book.index_last_read,
         bookID: this.state.book._id,
-        text:  this.state.book.text.en[this.state.currentSentenceIndex],
-        translation: this.state.book.text.esp[this.state.currentSentenceIndex].text,
+        text:  this.state.book.text.en[this.state.book.index_last_read],
+        translation: this.state.book.text.esp[this.state.book.index_last_read].text,
         bookTitle: this.state.book.title ? this.state.book.title : 'What is the title?',
         authorName: this.state.book.author ? this.state.book.author : 'What is the title?',
       })
@@ -70,8 +68,14 @@ class Reading extends Component {
     });
   }
 
+  translationText(translation){
+    return <Text style={styles.modal_text}>{`${translation[0]} - ${translation[1]}`}</Text>
+  }
+
   render() {
-    currentText = this.state.book.text
+    let currentText = this.state.book.text
+    console.log('==============================================')
+    console.log(currentText)
     
     return (
       <View style={styles.mainContainer}>
@@ -86,10 +90,10 @@ class Reading extends Component {
                 'user': true,
               },
               body: JSON.stringify({
-                sentenceIndex: this.state.currentSentenceIndex,
+                sentenceIndex: this.state.book.index_last_read,
                 bookID: this.state.book._id,
-                text:  this.state.book.text.en[this.state.currentSentenceIndex],
-                translation: this.state.book.text.esp[this.state.currentSentenceIndex].text,
+                text:  current.en[this.state.book.index_last_read],
+                translation: currentText.esp[this.state.book.index_last_read].text,
                 bookTitle: this.state.book.title ? this.state.book.title : 'What is the title?',
                 authorName: this.state.book.author ? this.state.book.author : 'What is the title?',
               })
@@ -110,10 +114,10 @@ class Reading extends Component {
         </View>
         <View style={styles.container}>
           <View style={{alignContent:'flex-start', paddingBottom: 20}}>
-            <Sentence text={currentText.en[this.state.currentSentenceIndex]}/>
+            <Sentence text={currentText.en[this.state.book.index_last_read]}/>
             <TouchableHighlight style={styles.button} onLongPress={() => { this.setState({ visible: true });}}>
               <View style={styles.button}>
-                <Sentence text={currentText.esp[this.state.currentSentenceIndex].text}/>
+                <Sentence text={currentText.esp[this.state.book.index_last_read].text}/>
               </View>
             </TouchableHighlight>
           </View>
@@ -123,10 +127,15 @@ class Reading extends Component {
           >
             <ModalContent>
               {
-                this.state.book.text.esp[this.state.currentSentenceIndex].translated.map(element => (
+                currentText.esp[this.state.book.index_last_read].translated.map(element => (
                   <Text style={styles.modal_text}>{`${element[0]} - ${element[1]}`}</Text>
                 ))
               }
+              {/* <View style={styles.container}>
+                <FlatList 
+                  data ={currentText.esp[this.state.book.index_last_read].translated} 
+                  renderItem={ text => this.translationText(text)}/>
+              </View> */}
             </ModalContent>
           </Modal>
           <View style={{display: 'flex', flexDirection: 'row', zIndex:1}}>
