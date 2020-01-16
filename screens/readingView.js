@@ -31,51 +31,18 @@ class Reading extends Component {
     this.props.indexRecent(this.state.book)
   }
 
-  closeModal() {
-      this.setState({ visible: false });
-  }
-
   lastSentence() {
     let book = {index_last_read: this.state.book.index_last_read > 0 ? this.state.book.index_last_read - 1 : 0}
     this.setState({
       book: {...this.state.book, ...book}
     });
   }
-  report_translation() {
-    alert('Thanks for tagging a translation error.')
-    fetch('https://whispering-crag-91530.herokuapp.com/bug/tag', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'user': true,
-      },
-      body: JSON.stringify({
-        sentenceIndex: this.state.book.index_last_read,
-        bookID: this.state.book._id,
-        text:  this.state.book.text.en[this.state.book.index_last_read],
-        translation: this.state.book.text.esp[this.state.book.index_last_read].text,
-        bookTitle: this.state.book.title ? this.state.book.title : 'What is the title?',
-        authorName: this.state.book.author ? this.state.book.author : 'What is the title?',
-      })
-    }).then(res => res.json())
-    .then(res => {
-      alert(res);
-    })
-    .catch(error => {
-      handleError(error, false);
-    });
-  }
-
-  translationText(translation){
-    return <Text style={styles.modal_text}>{`${translation[0]} - ${translation[1]}`}</Text>
-  }
 
   render() {
     let currentText = this.state.book.text
     
     return (
-      <View style={styles.mainContainer}>
+      <View style={styles.container}>
         <View style={{display:'flex', flexDirection:'row'}}>
           <View style={{flex:5}}></View>
           <TouchableWithoutFeedback style={{ flex:1, alignSelf:'flex-end'}} onPress={() => (
@@ -111,10 +78,10 @@ class Reading extends Component {
         </View>
         <View style={styles.container}>
           <View style={{alignContent:'flex-start', paddingBottom: 20}}>
-            <Text style={this.styles.book_text}>{currentText.en[this.state.book.index_last_read]}</Text>
+            <Text style={styles.text}>{currentText.en[this.state.book.index_last_read]}</Text>
             <TouchableHighlight style={styles.button} onLongPress={() => { this.setState({ visible: true });}}>
               <View style={styles.button}>
-              <Text style={this.styles.book_text}>{currentText.esp[this.state.book.index_last_read].text}</Text>
+              <Text style={styles.text}>{currentText.esp[this.state.book.index_last_read].text}</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -125,7 +92,7 @@ class Reading extends Component {
             <ModalContent>
               {
                 currentText.esp[this.state.book.index_last_read].translated.map(element => (
-                  <Text style={styles.modal_text}>{`${element[0]} - ${element[1]}`}</Text>
+                  <Text style={styles.text}>{`${element[0]} - ${element[1]}`}</Text>
                 ))
               }
             </ModalContent>
@@ -144,31 +111,19 @@ class Reading extends Component {
   }
 };
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FEFBF7',
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FEFBF7',
   },
-  modal_text: {
-    fontSize: 20,
-    fontFamily: 'Cochin',
+  text: {
+    fontSize: 23,
     textAlign: 'center',
     margin: 5,
   },
   button: {
     backgroundColor: '#FEFBF7',
-  },
-  book_text: {
-    fontSize: 22,
-    textAlign: 'center',
-    margin: 10,
-  },
+  }
 });
 export default connect(null, {indexRecent, updateVocabulary})(Reading);
