@@ -10,9 +10,9 @@ import {toggleIsReading} from '../helper/actions/index'
 class Library extends Component {
   constructor(props) {
     super(props);
-    const bookInfo = this.props.navigation.getParam('bookInfo', 'what book is this?')
+    const book = this.props.navigation.getParam('book', 'what book is this?')
     this.state = {
-      book: bookInfo
+      book: book
     };
   }
 
@@ -26,7 +26,6 @@ class Library extends Component {
 
   BookHead() {  
     book = this.state.book
-    console.log(this.state)
     return (
             <View style={styles.bookHead}>
               <Image style={{width: 50, height: 80, marginRight: 10}} source={{uri: book.cover}}/>
@@ -40,7 +39,6 @@ class Library extends Component {
   }
   BookDetail() {  
     book = this.state.book
-    console.log(this.state)
     return (
             <View style={styles.bookDetail}>
               <View style={styles.bookTile}>
@@ -58,7 +56,7 @@ class Library extends Component {
   }
   BookSummary() {  
     book = this.state.book
-    console.log(this.state)
+
     return (
             <View style={styles.bookSummary}>
               <Text style={styles.bookHeader}>Summary</Text>
@@ -79,7 +77,6 @@ class Library extends Component {
       <ScrollView style={styles.container}>
         {this.BookHead()}
         {this.BookDetail()}
-        {this.BookSummary()}
       </ScrollView>
     );
   }

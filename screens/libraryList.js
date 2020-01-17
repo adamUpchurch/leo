@@ -4,17 +4,13 @@ import {connect} from 'react-redux';
 import Modal, { ModalContent } from 'react-native-modals';
 import {toggleIsReading} from '../helper/actions/index'
 
-
-
-
-
-class Library extends Component {
+class BookShelf extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
-      bookInfo: null
+      book_in_modal: {title: ""}
     };
   }
 
@@ -32,15 +28,15 @@ class Library extends Component {
     book = book.item
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigate('Reading', {book: book})}
-        onLongPress={() => this.setState({ isModalVisible: true, bookInfo: book })}
+        <TouchableWithoutFeedback onPress={() => navigate('Reading', {book_title: book.title})}
+        onLongPress={() => this.setState({ isModalVisible: true, book_in_modal: book })}
         >
             <View style={styles.bookContainer}>
               <Image style={{width: 50, height: 80, marginTop: 10, marginRight: 10}} source={{uri: book.cover}}/>
               <View style={styles.bookTile}>
                 <Text style={styles.bookTileText}>{book.title}</Text>
                 <Text style={styles.bookTileSummary}>{book.author}</Text>
-                { book.author === 'Adam Upchurch' ? <Text style={styles.bookTileSummary}>{book.summary}</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
+                { book.author === 'Adam' ? <Text style={styles.bookTileSummary}>Read this first</Text> : <Text style={styles.bookTileSummary}>{`${book.grade_level} grade level with ${book.word_count} words & ${book.unique_words} unique words`}</Text>}
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -52,7 +48,7 @@ class Library extends Component {
   }
 
   updateIsReading() {
-    this.props.toggleIsReading(this.state.bookInfo)
+    this.props.toggleIsReading(this.state.book_in_modal)
   }
 
 
@@ -67,9 +63,11 @@ class Library extends Component {
             visible={this.state.isModalVisible}
             onTouchOutside={()=> this.setState({ isModalVisible: false })}
           >
-            <ModalContent>               
+            <ModalContent>  
+            <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 10}}>{this.state.book_in_modal.title}</Text>             
             <TouchableWithoutFeedback onPress={() => {
-              this.props.navigation.navigate('BookDetail', {bookInfo: this.state.bookInfo})
+              this.props.navigation.navigate('BookDetail', {book: this.state.book_in_modal})
+              this.setState({book: null})
               this.closeModal()
               }}>
                <View style={styles.ModalContent}>
@@ -81,7 +79,7 @@ class Library extends Component {
                  this.closeModal()
                  }}>
                <View style={styles.ModalContent}>
-                  <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`📔 Remove from reading list`}</Text>
+                  <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`📔 Add to your book shelf`}</Text>
                 </View>
                </TouchableWithoutFeedback>
                <View style={styles.ReviewContainer}>
@@ -92,7 +90,7 @@ class Library extends Component {
                       'Content-Type': 'application/json',
                       'user': true,
                     },
-                    body: JSON.stringify({...this.state.bookInfo, ...{isGoodReview: false}})
+                    body: JSON.stringify({...this.state.book_in_modal, ...{isGoodReview: false}})
                   })
                     .then(res => res.json())
                     .then(res => {
@@ -164,9 +162,7 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  var library = state.library
-
   var library = Object.values(state.library).filter(book => !book.isCurrentlyReading)
   return { library }
 }
-export default connect(mapStateToProps, {toggleIsReading})(Library);
+export default connect(mapStateToProps, {toggleIsReading})(BookShelf);

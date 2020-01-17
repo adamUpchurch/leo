@@ -10,39 +10,24 @@ class Reading extends Component {
     
   constructor(props) {
     super(props);
-    const bookReading = this.props.navigation.getParam('book', 'what book is this?')
-    console.log("Readdign this booook")
+    const book_title = this.props.navigation.getParam('book_title', 'what book is this?')
     this.state = {
-      book: bookReading,
-      visible: false
+      title: book_title,
+      isModalVisible: false,
+      index_last_read: this.props.library[book_title].index_last_read
     };
 
   }  
-  nextSentence() {
-    this.props.updateVocabulary(this.state.book.text.esp[this.state.book.index_last_read]["translated"])
-    var updatedIndex = {index_last_read: this.state.book.index_last_read + 1}
-    
-    if (this.state.book.index_last_read > this.state.book.text.en.length - 2) {
-      updatedIndex = {index_last_read: 0}
-    }
-    this.setState({
-      book: {...this.state.book, ...updatedIndex}
-    });
-    this.props.indexRecent(this.state.book)
-  }
-
-  lastSentence() {
-    let book = {index_last_read: this.state.book.index_last_read > 0 ? this.state.book.index_last_read - 1 : 0}
-    this.setState({
-      book: {...this.state.book, ...book}
-    });
-  }
 
   render() {
-    let currentText = this.state.book.text
+    let library = this.props.library
+    let title = this.state.title
+    let index_last_read = this.state.index_last_read
+    let currentText = library[title].text
     
     return (
       <View style={styles.container}>
+
         <View style={{display:'flex', flexDirection:'row'}}>
           <View style={{flex:5}}></View>
           <TouchableWithoutFeedback style={{ flex:1, alignSelf:'flex-end'}} onPress={() => (
@@ -54,12 +39,12 @@ class Reading extends Component {
                 'user': true,
               },
               body: JSON.stringify({
-                sentenceIndex: this.state.book.index_last_read,
-                bookID: this.state.book._id,
-                text:  current.en[this.state.book.index_last_read],
-                translation: currentText.esp[this.state.book.index_last_read].text,
-                bookTitle: this.state.book.title ? this.state.book.title : 'What is the title?',
-                authorName: this.state.book.author ? this.state.book.author : 'What is the title?',
+                sentenceIndex: index_last_read,
+                bookID: library[title]._id,
+                text:  current.en[index_last_read],
+                translation: currentText.esp[index_last_read].text,
+                bookTitle: library[title].title ? library[title].title : 'What is the title?',
+                authorName: library[title].author ? library[title].author : 'What is the title?',
               })
             }).then(res => res.json())
             .then(res => {
@@ -76,22 +61,24 @@ class Reading extends Component {
             </View>
           </TouchableWithoutFeedback>
         </View>
+
         <View style={styles.container}>
           <View style={{alignContent:'flex-start', paddingBottom: 20}}>
-            <Text style={styles.text}>{currentText.en[this.state.book.index_last_read]}</Text>
+            <Text style={styles.text}>{currentText.en[index_last_read]}</Text>
             <TouchableHighlight style={styles.button} onLongPress={() => { this.setState({ visible: true });}}>
               <View style={styles.button}>
-              <Text style={styles.text}>{currentText.esp[this.state.book.index_last_read].text}</Text>
+              <Text style={styles.text}>{currentText.esp[index_last_read].text}</Text>
               </View>
             </TouchableHighlight>
           </View>
+
           <Modal
             visible={this.state.visible}
             onTouchOutside={()=> this.setState({ visible: false })}
           >
             <ModalContent>
               {
-                currentText.esp[this.state.book.index_last_read].translated.map(element => (
+                currentText.esp[index_last_read].translated.map(element => (
                   <Text style={styles.text}>{`${element[0]} - ${element[1]}`}</Text>
                 ))
               }
@@ -109,7 +96,63 @@ class Reading extends Component {
       </View>
     );
   }
+
+  nextSentence() {
+    let book = this.props.library[this.state.title]
+    var index_last_read;
+
+    if (book.index_last_read > book.text.en.length - 2) {
+      index_last_read = 0
+    } else {
+      index_last_read = book.index_last_read + 1
+    }
+
+    let book_delta = {index_last_read}
+    
+    
+    this.props.updateVocabulary(book.text.esp[book.index_last_read]["translated"])
+    this.props.indexRecent({...book, ...book_delta})
+    this.setState({index_last_read})
+  }
+
+  lastSentence() {
+    let book = this.props.library[this.state.title]
+    let index_last_read = book.index_last_read > 0 ? book.index_last_read - 1 : 0
+    let book_delta = {index_last_read}
+    book = {...book, ...book_delta}
+    this.props.indexRecent(book)
+    this.setState({index_last_read})
+  }
+
+  flagError() {
+    fetch('https://whispering-crag-91530.herokuapp.com/bug/tag', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'user': true,
+              },
+              body: JSON.stringify({
+                sentenceIndex: index_last_read,
+                bookID: library[title]._id,
+                text:  current.en[index_last_read],
+                translation: currentText.esp[index_last_read].text,
+                bookTitle: library[title].title ? library[title].title : 'What is the title?',
+                authorName: library[title].author ? library[title].author : 'What is the title?',
+              })
+            }).then(res => res.json())
+            .then(res => {
+              alert('Thanks for tagging a translation error.')
+            })
+            .catch(error => {
+              handleError(error, false);
+            }),
+            alert('Thanks for tagging a translation error.')
+
+  }
+
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,4 +169,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEFBF7',
   }
 });
-export default connect(null, {indexRecent, updateVocabulary})(Reading);
+
+const mapStateToProps = state => {
+  var library = Object.values(state.library)
+  return state
+}
+
+export default connect(mapStateToProps, {indexRecent, updateVocabulary})(Reading);

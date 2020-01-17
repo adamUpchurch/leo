@@ -2,7 +2,7 @@ import { createStackNavigator, createSwitchNavigator, createBottomTabNavigator, 
 
 import Reading from './screens/readingView';
 import Library from './screens/libraryList';
-import Bookshelf from './screens/readingList';
+import Bookshelf from './screens/bookShelf';
 import Words from './screens/wordMagician';
 import BookDetail from './screens/bookDetail';
 

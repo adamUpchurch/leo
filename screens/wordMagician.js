@@ -54,7 +54,7 @@ class Words extends Component {
                     <Text style={styles.StatsText}>{words.length}</Text>
                   </View>
                 </View>
-                <Text style={styles.WordTileText}>Current Streaks:</Text>
+                {/* <Text style={styles.WordTileText}>Current Streaks:</Text>
                 <View style={styles.containerRows}>
                   <View style={styles.container}>
                     <Text style={styles.StatsText}>Days in a row:</Text>
@@ -75,7 +75,7 @@ class Words extends Component {
                     <Text style={styles.StatsText}>Weeks in a row:</Text>
                     <Text style={styles.StatsText}>{Math.floor((stats.mostWeekStreak) / 604800000)}</Text>
                   </View>
-                </View>
+                </View> */}
               </View>
           </React.Fragment>
       );
