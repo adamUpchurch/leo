@@ -57,14 +57,14 @@ module.exports = {
             
             action.words.map( word => {
               word = word.map(eachWord => eachWord.toLowerCase())
-              var exposures = 1;
+              var exposures;
               if (newState.vocab.hasOwnProperty(word[0])) {
                 exposures = newState.vocab[`${word[0]}`].exposures + 1
               }
               deltaVocab[word[0]] = {
                   text: word[0],
                   translated: word[1],
-                  exposures
+                  exposures: exposures ? exposures : 1
               }
             })
             newState.totalWordsExposedTo = newState.totalWordsExposedTo + action.words.length;

@@ -43,7 +43,7 @@ class Words extends Component {
       return (
           <React.Fragment>
               <View style={styles.container}>
-                <Text style={styles.WordTileText}>Word Exposure:</Text>
+                <Text style={styles.WordTileText}>Word Wizard 🧙‍♂️</Text>
                 <View style={styles.containerRows}>
                   <View style={styles.container}>
                     <Text style={styles.StatsText}>Words Read:</Text>

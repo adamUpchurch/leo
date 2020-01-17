@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableWithoutFeedback} from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableHighlight, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
 import Modal, { ModalContent } from 'react-native-modals';
 import {toggleIsReading} from '../helper/actions/index'
@@ -28,7 +28,7 @@ class BookShelf extends Component {
     book = book.item
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigate('Reading', {book_title: book.title})}
+        <TouchableHighlight onPress={() => navigate('Reading', {book_title: book.title})}
         onLongPress={() => this.setState({ isModalVisible: true, book_in_modal: book })}
         >
             <View style={styles.bookContainer}>
@@ -39,7 +39,7 @@ class BookShelf extends Component {
                 <Text style={styles.bookTileSummary}>{book.summary}</Text>
               </View>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableHighlight>
     )
   }
 
@@ -81,7 +81,7 @@ class BookShelf extends Component {
                   <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`📔 Remove from reading list`}</Text>
                 </View>
                </TouchableWithoutFeedback>
-               <View style={styles.ReviewContainer}>
+               {/* <View style={styles.ReviewContainer}>
                 <TouchableWithoutFeedback onPress={() => fetch('http://localhost:3000/bookReview/create', {
                     method: 'POST',
                     headers: {
@@ -89,7 +89,12 @@ class BookShelf extends Component {
                       'Content-Type': 'application/json',
                       'user': true,
                     },
-                    body: JSON.stringify({...this.state.book_in_modal, ...{isGoodReview: false}})
+                    body: JSON.stringify({
+                      bookID: this.state.book_in_modal._id,
+                      authorName: this.state.book_in_modal.author,
+                      bookTitle: this.state.book_in_modal.title,
+                      isGoodReview: true,
+                    })
                   })
                     .then(res => res.json())
                     .then(res => {
@@ -103,7 +108,7 @@ class BookShelf extends Component {
                     <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`👍 Do you love the book?!`}</Text>
                   </View>
                 </TouchableWithoutFeedback>
-               </View>
+               </View> */}
             </ModalContent>
           </Modal>
         {this.BookList()}
@@ -117,13 +122,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: '#FEFBF7',
-  },
-  bookContainerTutorial: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#F7FAFE',
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
   },
   bookContainer: {
     flex: 1,

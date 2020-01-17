@@ -82,7 +82,7 @@ class BookShelf extends Component {
                   <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`📔 Add to your book shelf`}</Text>
                 </View>
                </TouchableWithoutFeedback>
-               <View style={styles.ReviewContainer}>
+               {/* <View style={styles.ReviewContainer}>
                 <TouchableWithoutFeedback onPress={() => fetch('http://localhost:3000/bookReview/create', {
                     method: 'POST',
                     headers: {
@@ -90,7 +90,12 @@ class BookShelf extends Component {
                       'Content-Type': 'application/json',
                       'user': true,
                     },
-                    body: JSON.stringify({...this.state.book_in_modal, ...{isGoodReview: false}})
+                    body: JSON.stringify({
+                      bookID: this.state.book_in_modal._id,
+                      authorName: this.state.book_in_modal.author,
+                      bookTitle: this.state.book_in_modal.title,
+                      isGoodReview: true,
+                    })
                   })
                     .then(res => res.json())
                     .then(res => {
@@ -104,7 +109,7 @@ class BookShelf extends Component {
                     <Text style={{ fontSize: 20, alignSelf: 'auto'}}>{`👍 Do you love the book?!`}</Text>
                   </View>
                 </TouchableWithoutFeedback>
-               </View>
+               </View> */}
             </ModalContent>
           </Modal>
         {this.BookList()}
