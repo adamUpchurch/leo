@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.5.0",
+    "@react-native-community/async-storage": "^1.7.1",
     "async": "^2.6.3",
     "link": "^0.1.5",
     "passport-google-oauth20": "^2.0.0",

@@ -43,7 +43,6 @@ class Library extends Component {
             <View style={styles.bookDetail}>
               <View style={styles.bookTile}>
                 <Text style={styles.bookHeader}>Detail</Text>
-                <Text style={styles.detailText}>Completion: {(book.index_furthest / book.text.en.length).toFixed(2) * 100}%</Text>
                 <Text style={styles.detailText}>Reading Level: {book.grade_level}</Text>
                 <Text style={styles.detailText}>Total Words: {book.word_count}</Text>
                 <Text style={styles.detailText}>Unique Words: {book.unique_words}</Text>
@@ -93,6 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
+    fontSize: 20,
     width: '100%',
     paddingBottom: 10
   },

@@ -37,6 +37,7 @@ class BookShelf extends Component {
                 <Text style={styles.bookTileText}>{book.title}</Text>
                 <Text style={styles.bookTileSummary}>{book.author}</Text>
                 <Text style={styles.bookTileSummary}>{book.summary}</Text>
+                <Text style={styles.detailText}>{(book.index_last_read / book.length).toFixed(2) * 100}% Complete</Text>
               </View>
             </View>
           </TouchableHighlight>
