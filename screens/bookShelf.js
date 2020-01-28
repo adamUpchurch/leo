@@ -26,6 +26,7 @@ class BookShelf extends Component {
     const {navigate} = this.props.navigation;
 
     book = book.item
+    let percentComplete = (book.index_last_read / book.text.en.length).toFixed(2) * 100
 
     return (
         <TouchableHighlight onPress={() => navigate('Reading', {book_title: book.title})}
@@ -37,7 +38,7 @@ class BookShelf extends Component {
                 <Text style={styles.bookTileText}>{book.title}</Text>
                 <Text style={styles.bookTileSummary}>{book.author}</Text>
                 <Text style={styles.bookTileSummary}>{book.summary}</Text>
-                <Text style={styles.detailText}>{(book.index_last_read / book.length).toFixed(2) * 100}% Complete</Text>
+                <Text style={styles.detailText}>{percentComplete}% Complete</Text>
               </View>
             </View>
           </TouchableHighlight>
@@ -159,6 +160,7 @@ const styles = StyleSheet.create({
     flex: 0,
   },
 });
+
 const mapStateToProps = state => {
   var library = Object.values(state.library).filter(book => book.isCurrentlyReading)
   return { library }

@@ -5,9 +5,7 @@ import Modal, { ModalContent } from 'react-native-modals';
 import {connect} from 'react-redux'
 import {indexRecent, updateVocabulary} from '../helper/actions/index'
 
-
 class Reading extends Component {
-    
   constructor(props) {
     super(props);
     const book_title = this.props.navigation.getParam('book_title', 'what book is this?')
@@ -18,7 +16,6 @@ class Reading extends Component {
     };
 
   }  
-
   render() {
     let library = this.props.library
     let title = this.state.title
@@ -41,7 +38,7 @@ class Reading extends Component {
               body: JSON.stringify({
                 sentenceIndex: index_last_read,
                 bookID: library[title]._id,
-                text:  current.en[index_last_read],
+                text:  currentText.en[index_last_read],
                 translation: currentText.esp[index_last_read].text,
                 bookTitle: library[title].title ? library[title].title : 'What is the title?',
                 authorName: library[title].author ? library[title].author : 'What is the title?',
@@ -63,7 +60,7 @@ class Reading extends Component {
         </View>
 
         <View style={styles.container}>
-          <View style={{alignContent:'flex-start', paddingBottom: 20}}>
+          <View style={{alignContent:'flex-start', paddingBottom: 10}}>
             <Text style={styles.text}>{currentText.en[index_last_read]}</Text>
             <TouchableHighlight style={styles.button} onLongPress={() => { this.setState({ visible: true });}}>
               <View style={styles.button}>
@@ -86,10 +83,10 @@ class Reading extends Component {
           </Modal>
           <View style={{display: 'flex', flexDirection: 'row', zIndex:1}}>
               <TouchableWithoutFeedback onPress={() => this.lastSentence()}>
-                <View style={{width: 250, height: 250, margin: '5%'}} />
+                <View style={{width: '45%', height: 500}} />
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={() => this.nextSentence()}>
-                <View style={{width: 250, height: 250, margin: '5%'}} />
+                <View style={{width: '45%', height: 500}} />
               </TouchableWithoutFeedback>
           </View>
         </View>
@@ -156,7 +153,8 @@ class Reading extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // flexDirection: 'column-reverse',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: '#FEFBF7',
   },

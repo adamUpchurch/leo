@@ -29,11 +29,12 @@ export default class Leo extends Component {
     
     componentWillMount() {
         var self = this;
-        AppState.addEventListener('change', this._handleAppStateChange.bind(this))
+        AppState.addEventListener('change', this._handleAppStateChange.bind(this));
         this.setState({isStoreLoading: true})
+        console.log('Component is mounting!')
 
         AsyncStorage.getItem('@LIBRARY').then( library => {
-            
+            console.log("Library: ", library)
             if (library) {
                 
                 library = JSON.parse(library)
@@ -52,16 +53,23 @@ export default class Leo extends Component {
                     self.setState({store: createStore(reducers, initialStore)})
                 })
         
-            } else self.setState({store, isStoreLoading: false})
+            } else {
+                self.setState({isStoreLoading: false})
+            }
         }).catch(error => {
-            self.setState({store, isStoreLoading: false})
+            self.setState({isStoreLoading: false})
         })
     }
     componentWillUnmount() {
+        console.log('Component unmounting')
+        console.log(this.state)
         AppState.removeEventListener('change', this._handleAppStateChange.bind(this));
     }
 
     _handleAppStateChange(currentAppState) {
+        console.log('_handleAppStateChange')
+        console.log(this.state)
+        console.log(currentAppState)
         let storingValue = this.state.store
         AsyncStorage.setItem('@LIBRARY', JSON.stringify(storingValue.library))
         AsyncStorage.setItem('@VOCABULARY', JSON.stringify(storingValue.vocabulary))
